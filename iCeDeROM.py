@@ -6,6 +6,8 @@
 # (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
+#TODO: Use logger module to log events.
+
 import sys
 import git
 
@@ -24,13 +26,21 @@ class iCeDeROM(object):
 		print 'iCeDeROM '+self.release+' initializing...'
 		#Modules related stuff
 		self.modules=dict() 
-		if not params.has_key('ui'):
-			print 'Default UI is QT..'
-			params['ui']='qt'
+		if not params.has_key('ui'): params['ui']='qt'
 		if params['ui']=='qt':
-			import modules.ui.qt.main
-			self.modules['ui']=modules.ui.qt.main.MainWindow(self)
-			self.modules['ui'].start(self)
+			#Create the GUI MainWindow
+			import modules.ui.qt.mainWindow
+			module=modules.ui.qt.mainWindow.module(iCeDeROM=self, argv=sys.argv)
+			module.setup(iCeDeROM=self)
+			self.modules[module.name]=module
+			#Import example mdiWindow
+			import modules.ui.qt.mdiChild_example
+			module=modules.ui.qt.mdiChild_example.module(iCeDeROM=self)
+			module.setup(iCeDeROM=self)
+			module.start(iCeDeROM=self)
+			self.modules[module.name]=module
+			#When all is set start the GUI
+			self.modules['gui'].start()
 
 if __name__ == '__main__':
 	iCD=iCeDeROM(ui='qt')
