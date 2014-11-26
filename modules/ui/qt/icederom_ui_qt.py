@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'icederom_ui_qt.ui'
 #
-# Created: Tue Nov 25 20:25:18 2014
+# Created: Wed Nov 26 10:51:25 2014
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -26,6 +26,7 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
+        MainWindow.resize(877, 599)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
@@ -41,7 +42,7 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.mdiArea)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 853, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 877, 22))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menu_File = QtGui.QMenu(self.menubar)
         self.menu_File.setObjectName(_fromUtf8("menu_File"))
@@ -58,7 +59,6 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(_translate("MainWindow", "iCeDeROM", None))
         self.menu_File.setTitle(_translate("MainWindow", "&File", None))
         self.menuAbout.setTitle(_translate("MainWindow", "About", None))
 

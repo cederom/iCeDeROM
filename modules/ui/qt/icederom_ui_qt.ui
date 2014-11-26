@@ -2,8 +2,13 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="windowTitle">
-   <string>iCeDeROM</string>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>877</width>
+    <height>599</height>
+   </rect>
   </property>
   <widget class="QWidget" name="centralwidget">
    <property name="cursor">
@@ -36,7 +41,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>853</width>
+     <width>877</width>
      <height>22</height>
     </rect>
    </property>

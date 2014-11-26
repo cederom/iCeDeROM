@@ -11,14 +11,17 @@ from icederom_ui_qt import *
 from PyQt4 import Qt,QtGui
 
 class MainWindow(object):
-	def __init__(self):
+	"""Main Application Window for QT UI."""
+	def __init__(self, iCeDeROM, **params):
+		"""Create QT Application, MainWindow."""
 		self.app=QtGui.QApplication(sys.argv)
 		self.window=QtGui.QMainWindow()
-		self.setup()
-	def setup(self, **params):
+		self.window.setWindowTitle('iCeDeROM ('+iCeDeROM.release+')')
+		self.setup(iCeDeROM)
+	def setup(self, iCeDeROM, **params):
 		self.QtDesigner=Ui_MainWindow()
 		self.QtDesigner.setupUi(self.window)
-	def start(self, **params):
+	def start(self, iCeDeROM, **params):
 		self.window.showMaximized()
 		self.window.raise_()
 		self.window.show()
