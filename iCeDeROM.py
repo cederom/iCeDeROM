@@ -8,7 +8,6 @@
 
 import sys
 import git
-import modules.ui.qt.main
 
 class iCeDeROM(object):
 	"""iCeDeROM main class."""
@@ -28,7 +27,8 @@ class iCeDeROM(object):
 		if not params.has_key('ui'):
 			print 'Default UI is QT..'
 			params['ui']='qt'
-		if params['ui']=='qt':	
+		if params['ui']=='qt':
+			import modules.ui.qt.main
 			self.modules['ui']=modules.ui.qt.main.MainWindow(self)
 			self.modules['ui'].start(self)
 
