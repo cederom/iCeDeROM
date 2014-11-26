@@ -15,7 +15,8 @@ class iCeDeROM(object):
 	def __init__(self, **params):
 		"""
 		Parameters:
-			ui='qt' to enable QT UI (default).
+			ui='qt'   to enable and start QT UI (default).
+			ui='none' do not use UI.
 		"""
 		#GIT related stuff
 		self.gitrepo=git.Repo()
@@ -27,8 +28,9 @@ class iCeDeROM(object):
 		if not params.has_key('ui'):
 			print 'Default UI is QT..'
 			params['ui']='qt'
-		self.modules['ui']=modules.ui.qt.main.MainWindow(self)
-		self.modules['ui'].start(self)
+		if params['ui']=='qt':	
+			self.modules['ui']=modules.ui.qt.main.MainWindow(self)
+			self.modules['ui'].start(self)
 
 if __name__ == '__main__':
 	iCD=iCeDeROM(ui='qt')

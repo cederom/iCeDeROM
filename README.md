@@ -1,5 +1,4 @@
-<h1>iCeDeROM
-In-Circuit Evaluate Debug and Edit for Research on Microelectronics</h1>
+<h1>iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics</h1>
 
 <h2>About</h2>
 iCeDeROM is a platform and hardware independent python-based low-level development and analysis software utility to work with microelectronic devices such as embedded and computer systems.
