@@ -3,6 +3,7 @@
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
+# Module 'gui' (Qt4 based Main Window and GUI Core).
 # (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 

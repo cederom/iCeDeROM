@@ -7,6 +7,5 @@
 # All rights reserved, so far :-)
 
 __all__ = [
-'log',
-'ui'
+'log'
 ]

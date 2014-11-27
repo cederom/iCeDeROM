@@ -3,6 +3,7 @@
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
+# Module 'ui_qt_mdiChild_example' (example of module with mdiChildWindow GUI functionality).
 # (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
@@ -12,7 +13,7 @@ class module(object):
 	"""Simple example of Qt mdiChild window."""
 	def __init__(self, **params):
 		"""Creates window module and register to iCeDeROM modules."""
-		self.name='ui_qt_mdiChild'
+		self.name='ui_qt_mdiChild_example'
 		self.mdiWindow=QtGui.QDialog()
 		try:
 			params['iCeDeROM'].modules['gui'].mdi.addSubWindow(self.mdiWindow)
