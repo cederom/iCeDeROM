@@ -6,8 +6,6 @@
 # (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-#TODO: Use logger module to log events.
-
 import sys
 import git
 
@@ -30,25 +28,26 @@ class iCeDeROM(object):
 		self.gitrepo=git.Repo()
 		self.release='git-'+str(self.gitrepo.active_branch)+'-'
 		self.release+=str(self.gitrepo.commit().hexsha)
-		self.modules['log'].log.info('iCeDeROM %s initializing...', self.release)		
+		self.modules['log'].log.info('iCeDeROM %s init...', self.release)		
 		#Setup GUI related modules (optional)
-		if not params.has_key('ui'): params['ui']='qt'
-		if params['ui']=='qt':
+		self.ui=params['ui'] if params.has_key('ui') else 'qt'
+		if self.ui=='qt':
 			#Create the GUI MainWindow
-			import modules.ui.qt.mainWindow
-			module=modules.ui.qt.mainWindow.module(iCeDeROM=self, argv=sys.argv)
+			import modules.ui.qt.QtMainWindow
+			module=modules.ui.qt.QtMainWindow.module(iCeDeROM=self, argv=sys.argv)
 			module.setup(iCeDeROM=self)
 			self.modules[module.name]=module
 			self.modules['log'].log.info('Added module: %s', module.name)
 			#Import example mdiWindow
-			import modules.ui.qt.mdiChild_example
-			module=modules.ui.qt.mdiChild_example.module(iCeDeROM=self)
+			import modules.ui.qt.QtMdiChildExample
+			module=modules.ui.qt.QtMdiChildExample.module(iCeDeROM=self)
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
 			self.modules['log'].log.info('Added module: %s', module.name)
 			#When all is set start the GUI
-			self.modules['gui'].start()
+			self.retval=self.modules['gui'].start()
+			self.modules['log'].log.info('iCeDeROM %s shutdown...', self.release)
 
 if __name__ == '__main__':
 	iCD=iCeDeROM(ui='qt')

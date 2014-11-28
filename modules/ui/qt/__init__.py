@@ -7,6 +7,6 @@
 # All rights reserved, so far :-)
 
 __all__ = [
-'mainWindow',
-'mdiChild_example'
+'QtMainWindow',
+'QtMdiChildExample'
 ]

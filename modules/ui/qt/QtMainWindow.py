@@ -36,4 +36,4 @@ class module(object):
 		self.window.raise_()
 		self.window.show()
 	def start(self, **params):
-		sys.exit(self.app.exec_())
+		return self.app.exec_()
