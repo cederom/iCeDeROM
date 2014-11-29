@@ -28,7 +28,7 @@ class iCeDeROM(object):
 		self.gitrepo=git.Repo()
 		self.release='git-'+str(self.gitrepo.active_branch)+'-'
 		self.release+=str(self.gitrepo.commit().hexsha)
-		self.modules['log'].log.info('iCeDeROM %s init...', self.release)		
+		self.modules['log'].log.info('iCeDeROM %s init...', self.release)
 		#Setup GUI related modules (optional)
 		self.ui=params['ui'] if params.has_key('ui') else 'qt'
 		if self.ui=='qt':
@@ -37,17 +37,20 @@ class iCeDeROM(object):
 			module=modules.ui.qt.QtMainWindow.module(iCeDeROM=self, argv=sys.argv)
 			module.setup(iCeDeROM=self)
 			self.modules[module.name]=module
-			self.modules['log'].log.info('Added module: %s', module.name)
 			#Import example mdiWindow
 			import modules.ui.qt.QtMdiChildExample
 			module=modules.ui.qt.QtMdiChildExample.module(iCeDeROM=self)
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
-			self.modules['log'].log.info('Added module: %s', module.name)
+			#Log available modules
+			modlist=str('Loaded modules:')
+			for module in self.modules.keys(): modlist+=' '+module
+			self.modules['log'].log.info(modlist)
 			#When all is set start the GUI
 			self.retval=self.modules['gui'].start()
 			self.modules['log'].log.info('iCeDeROM %s shutdown...', self.release)
+			self.modules['log'].stop()
 
 if __name__ == '__main__':
 	iCD=iCeDeROM(ui='qt')

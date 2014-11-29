@@ -8,17 +8,31 @@
 # All rights reserved, so far :-)
 
 import logging
+import sys
 
 default_filename='iCeDeROM.log'
 default_level=logging.INFO
 default_format='%(asctime)s %(levelname)s %(filename)s/%(funcName)s: %(message)s'
 
 class module(object):
-	"""Provides basic logging capabilities (based on the python 'logging' module)."""
+	"""
+	Provides basic logging capabilities (based on the python 'logging' module).
+	Two outputs are provided: Stream(sys.stderr), File(filename='iCeDeROM.log').
+	External modules can read log information from Stream and/or File as needed.
+	"""
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='log'
 		self.log=logging.getLogger('iCeDeROM')
+		self.filename=default_filename
+		self.level=default_level
+		self.format=default_format
+
+	def start(self, **params):
+		return
+
+	def stop(self, **params):
+		logging.shutdown()
 
 	def setup(self, **params):
 		"""
@@ -29,14 +43,13 @@ class module(object):
 			level    is the default loglevel.
 		If parameter is not provided a default value is used.
 		"""
-		filename=params['filename'] if params.has_key('filename') else default_filename
-		level=params['level'] if params.has_key('level') else default_level
-		format=params['format'] if params.has_key('format') else default_format
-		self.setupFormatter(format)
-		self.setupStreamHandler(level)
-		self.setupFileHandler(filename, level)
-		self.setupLevel(level)
-
+		self.filename=params['filename'] if params.has_key('filename') else default_filename
+		self.level=params['level'] if params.has_key('level') else default_level
+		self.format=params['format'] if params.has_key('format') else default_format
+		self.setupFormatter(self.format)
+		self.setupStreamHandler(self.level)
+		self.setupFileHandler(self.filename, self.level)
+		self.setupLevel(self.level)
 
 	def setupFormatter(self, format=default_format):
 		"""
@@ -49,7 +62,7 @@ class module(object):
 
 	def setupStreamHandler(self, level=default_level):
 		"""
-		Setup the StreamHandler.
+		Setup the StreamHandler. sys.STDERR is the output.
 		Parameters:
 			level    is the default loglevel.
 		If parameter is not provided a default value is used.
@@ -59,7 +72,7 @@ class module(object):
 		self.stream.setFormatter(self.formatter)
 		self.log.addHandler(self.stream)
 
-	def setupFileHandler(self, filename=default_filename, level=default_level):
+	def setupFileHandler(self, filename=default_filename, level=default_level, mode='w'):
 		"""
 		Setup the FileHandler.
 		Parameters:
@@ -67,7 +80,7 @@ class module(object):
 			level    is the default loglevel.
 		If parameter is not provided a default value is used.
 		"""		
-		self.file=logging.FileHandler(filename)
+		self.file=logging.FileHandler(filename, mode)
 		self.file.setLevel(level)
 		self.file.setFormatter(self.formatter)
 		self.log.addHandler(self.file)

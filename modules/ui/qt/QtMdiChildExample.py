@@ -54,12 +54,13 @@ class QtWindow(QtGui.QMainWindow):
 			raise
 		self.window.setWindowTitle('QtMdiChildExample')
 		self.window.connect(self.window.pushButton, QtCore.SIGNAL('clicked()'), lambda:self.listModules(**params))
+		self.window.connect(self.window.pushButton_2, QtCore.SIGNAL('clicked()'), lambda:self.logMessage(**params))
 	def setup(self, **params):
 		return
 	def start(self, **params):
 		self.window.show()
 	def stop(self, **params):
-		elf.window.hide()
+		self.window.hide()
 
 	def listModules(self, **params):
 		if not params.has_key('iCeDeROM'):
@@ -68,3 +69,10 @@ class QtWindow(QtGui.QMainWindow):
 		self.window.textBrowser.append('Available Modules:')
 		for module in params['iCeDeROM'].modules:
 			self.window.textBrowser.append(module)
+
+	def logMessage(self, **params):
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
+		params['iCeDeROM'].modules['log'].log.info(self.window.logInput.toPlainText())
+		self.window.logInput.clear()
+			

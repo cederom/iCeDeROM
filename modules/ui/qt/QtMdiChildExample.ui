@@ -58,6 +58,20 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QTextBrowser" name="logInput">
+      <property name="readOnly">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="text">
+       <string>Sent Log Message</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
  </widget>
