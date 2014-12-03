@@ -8,7 +8,9 @@
 # All rights reserved, so far :-)
 
 import logging
-import sys
+import sys, io
+from PyQt4 import QtCore,QtGui
+
 
 default_filename='iCeDeROM.log'
 default_level=logging.INFO
@@ -23,6 +25,7 @@ class module(object):
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='log'
+		self.texts=dict()
 		self.log=logging.getLogger('iCeDeROM')
 		self.filename=default_filename
 		self.level=default_level
@@ -95,3 +98,22 @@ class module(object):
 		self.log.setLevel(level)
 		self.stream.setLevel(level)
 		self.file.setLevel(level)
+
+	def createQtWidget(self, **params):
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')		
+		self.texts['log']=QtGui.QTextEdit()
+		self.texts['log'].setAcceptRichText(False)
+		self.texts['log'].setReadOnly(True)
+		self.texts['log'].setFontFamily("Courier")
+		self.texts['log'].show()
+		#params['iCeDeROM'].modules['gui'].tabs['info'].addTab(self.texts['log'], 'log')
+		self.logfswatcher=QtCore.QFileSystemWatcher([params['iCeDeROM'].modules['log'].filename])
+		self.logfswatcher.connect(self.logfswatcher, QtCore.SIGNAL('fileChanged(QString)'),self.logFileWatcher)
+		self.logfp=io.open(params['iCeDeROM'].modules['log'].filename,'rt')
+		return self.texts[self.name]
+
+	@QtCore.pyqtSlot(str)
+	def logFileWatcher(self, path):
+		self.texts['log'].insertPlainText(self.logfp.read())
+	

@@ -20,6 +20,7 @@ class module(object):
 			argv     from sys.argv (mandatory).
 		"""
 		self.app=QtGui.QApplication(params['argv'])
+		self.app.setStyle("cleanlooks")
 		self.name='gui'
 		self.docks=dict()
 		self.tabs=dict()
@@ -32,7 +33,6 @@ class module(object):
 		return self.app.exec_()
 
 	def stop(self, **params):
-		self.logfp.close()
 		self.app.quit()
 
 	def setup(self, **params):
@@ -57,13 +57,10 @@ class module(object):
 		self.window.raise_()
 
 	def createDocks(self, **params):
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
 		#Information Dock and its contents
-		self.texts['log']=QtGui.QTextEdit()
-		self.texts['log'].setAcceptRichText(False)
-		self.texts['log'].setReadOnly(True)
-		self.texts['log'].setFontFamily("Courier")
 		self.tabs['info']=QtGui.QTabWidget()
-		self.tabs['info'].addTab(self.texts['log'], 'log')
 		self.docks['info']=QtGui.QDockWidget()
 		self.docks['info'].setWindowTitle('info')
 		self.docks['info'].setMinimumSize(250,50)
@@ -72,15 +69,10 @@ class module(object):
 			QtGui.QDockWidget.AllDockWidgetFeatures)
 		self.docks['info'].setWidget(self.tabs['info'])
 		self.window.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.docks['info'])
+		self.tabs['info'].addTab(
+			params['iCeDeROM'].modules['log'].createQtWidget(**params),
+			params['iCeDeROM'].modules['log'].name)
+
 
 	def setupDocks(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		self.logfswatcher=QtCore.QFileSystemWatcher([params['iCeDeROM'].modules['log'].filename])
-		self.logfswatcher.connect(self.logfswatcher, QtCore.SIGNAL('fileChanged(QString)'),self.logFileWatcher)
-		self.logfp=io.open(params['iCeDeROM'].modules['log'].filename,'rt')
-
-	@QtCore.pyqtSlot(str)
-	def logFileWatcher(self, path):
-		self.texts['log'].insertPlainText(self.logfp.read())
-
+		return

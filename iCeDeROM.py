@@ -37,9 +37,15 @@ class iCeDeROM(object):
 			module=modules.ui.qt.QtMainWindow.module(iCeDeROM=self, argv=sys.argv)
 			module.setup(iCeDeROM=self)
 			self.modules[module.name]=module
-			#Import example mdiWindow
+			#Load example mdiWindow module
 			import modules.ui.qt.QtMdiChildExample
 			module=modules.ui.qt.QtMdiChildExample.module(iCeDeROM=self)
+			module.setup(iCeDeROM=self)
+			module.start(iCeDeROM=self)
+			self.modules[module.name]=module
+			#Load Python Console module
+			import modules.cli.python
+			module=modules.cli.python.module(iCeDeROM=self)
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
