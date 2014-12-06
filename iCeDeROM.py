@@ -29,6 +29,8 @@ class iCeDeROM(object):
 		self.release='git-'+str(self.gitrepo.active_branch)+'-'
 		self.release+=str(self.gitrepo.commit().hexsha)
 		self.modules['log'].log.info('iCeDeROM %s init...', self.release)
+		#Log Python details
+		self.modules['log'].log.info('Using Python ('+sys.platform+') '+sys.version.replace('\n',''))
 		#Setup GUI related modules (optional)
 		self.ui=params['ui'] if params.has_key('ui') else 'qt'
 		if self.ui=='qt':
