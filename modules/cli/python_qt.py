@@ -16,6 +16,7 @@ class module(QtGui.QTextEdit):
 	def __init__(self, **params):
 		"""Create Qt Widget for Python CLI."""
 		self.name='cli_python_qt'
+		self.tabs=dict()
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params['iCeDeROM'].modules.has_key('gui'):
@@ -24,8 +25,8 @@ class module(QtGui.QTextEdit):
 		self.setAcceptRichText(False)
 		self.setReadOnly(False)
 		self.setFontFamily("Courier")
-		self.buffer=str()
-		#self.texts[self.name].keyPressEvent=self.captureInput
+		self.history_index=0
+		self.history=list()
 
 	def setup(self, **params):
 		return
@@ -37,8 +38,8 @@ class module(QtGui.QTextEdit):
 		self.hide()
 
 	def keyPressEvent(self, QKeyEvent):
+		cursor=self.textCursor()
 		if QKeyEvent.key()==QtCore.Qt.Key_Return:
-			cursor=self.textCursor()
 			cursor.select(QtGui.QTextCursor.LineUnderCursor)
 			self.moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
 			self.setTextCursor(cursor)
@@ -46,11 +47,28 @@ class module(QtGui.QTextEdit):
 			self.moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
 			self.insertPlainText('\n')
 			self.moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
-			self.eval(self.command)
+			self.historyAppend(self.command)
+			self.execute(self.command)
 		elif QKeyEvent.key()==QtCore.Qt.Key_Up:
-			return
+			if self.history_index>0: self.history_index-=1
+			cursor.select(QtGui.QTextCursor.LineUnderCursor)
+			self.setTextCursor(cursor)
+			self.insertPlainText(self.history[self.history_index])
 		elif QKeyEvent.key()==QtCore.Qt.Key_Down:
-			return
+			if self.history_index<len(self.history)-1: self.history_index+=1
+			cursor.select(QtGui.QTextCursor.LineUnderCursor)
+			self.setTextCursor(cursor)
+			self.insertPlainText(self.history[self.history_index])			
+		elif QKeyEvent.key()==QtCore.Qt.Key_PageUp:
+			self.history_index=0
+			cursor.select(QtGui.QTextCursor.LineUnderCursor)
+			self.setTextCursor(cursor)			
+			self.insertPlainText(self.history[self.history_index])
+		elif QKeyEvent.key()==QtCore.Qt.Key_PageDown:
+			self.history_index=len(self.history)-1
+			cursor.select(QtGui.QTextCursor.LineUnderCursor)
+			self.setTextCursor(cursor)			
+			self.insertPlainText(self.history[self.history_index])			
 		else:
 			super(module, self).keyPressEvent(QKeyEvent)		
 
@@ -58,6 +76,11 @@ class module(QtGui.QTextEdit):
 		self.insertPlainText(data)
 		self.moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
 
-	def eval(self, command):
+	def execute(self, command):
 		"""Super class should replace this with python evaluation routine."""
 		print 'CliPythonQt: No Python handler provided!'
+
+	def historyAppend(self, command):
+		self.history.append(command)
+		self.history_index=len(self.history)
+		

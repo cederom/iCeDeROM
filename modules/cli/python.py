@@ -9,7 +9,6 @@
 #TODO: add file and script execution routine
 
 import code
-from PyQt4 import QtCore
 import python_qt
 
 class module(object):
@@ -19,17 +18,15 @@ class module(object):
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='python'
-		self.texts=dict()
-		self.tabs=dict()
-		self.buffer=str()
 		self.python=code.InteractiveConsole(params)
 		#Create GUI part if necessary
 		if not params.has_key('iCeDeROM'): return
 		if not params['iCeDeROM'].modules.has_key('gui'): return
 		self.pythonQt=python_qt.module(**params)
 		code.sys.stdout=self.pythonQt
-		self.pythonQt.eval=self.python.push
+		self.pythonQt.execute=self.python.push
 		self.python.write=self.pythonQt.write
+		self.pythonQt.write('Python ('+code.sys.platform+') '+code.sys.version+'\n')
 
 	def setup(self, **params):
 		return
@@ -39,7 +36,7 @@ class module(object):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params['iCeDeROM'].modules.has_key('gui'): return
 		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		self.tabs[self.name]=params['iCeDeROM'].modules['gui'].tabs['info'].addTab(
+		self.pythonQt.tabs[self.name]=params['iCeDeROM'].modules['gui'].tabs['info'].addTab(
 			self.pythonQt, 'python')
 		self.pythonQt.show()
 		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(True)
@@ -52,3 +49,7 @@ class module(object):
 		params['iCeDeROM'].modules['gui'].tabs['info'].removeTab(self.tabs[self.name])
 		self.texts[self.name].hide()
 		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(True)
+
+	def execute(self, command):
+		self.python.resetbuffer()
+		return self.python.push(command)
