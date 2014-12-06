@@ -102,18 +102,17 @@ class module(object):
 	def createQtWidget(self, **params):
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')		
-		self.texts['log']=QtGui.QTextEdit()
-		self.texts['log'].setAcceptRichText(False)
-		self.texts['log'].setReadOnly(True)
-		self.texts['log'].setFontFamily("Courier")
-		self.texts['log'].show()
-		#params['iCeDeROM'].modules['gui'].tabs['info'].addTab(self.texts['log'], 'log')
-		self.logfswatcher=QtCore.QFileSystemWatcher([params['iCeDeROM'].modules['log'].filename])
+		self.texts[self.name]=QtGui.QTextEdit()
+		self.texts[self.name].setAcceptRichText(False)
+		self.texts[self.name].setReadOnly(True)
+		self.texts[self.name].setFontFamily("Courier")
+		self.texts[self.name].show()
+		self.logfswatcher=QtCore.QFileSystemWatcher([params['iCeDeROM'].modules[self.name].filename])
 		self.logfswatcher.connect(self.logfswatcher, QtCore.SIGNAL('fileChanged(QString)'),self.logFileWatcher)
-		self.logfp=io.open(params['iCeDeROM'].modules['log'].filename,'rt')
+		self.logfp=io.open(params['iCeDeROM'].modules[self.name].filename,'rt')
 		return self.texts[self.name]
 
 	@QtCore.pyqtSlot(str)
 	def logFileWatcher(self, path):
-		self.texts['log'].insertPlainText(self.logfp.read())
+		self.texts[self.name].insertPlainText(self.logfp.read())
 	
