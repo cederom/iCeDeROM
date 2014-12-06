@@ -18,13 +18,14 @@ class module(object):
 		Parameters:
 			iCeDeROM object reference (mandatory).
 			argv     from sys.argv (mandatory).
+			
+		You can override QtStyle with '-style' commandline option.
 		"""
+		QtGui.QApplication.setStyle('cleanlooks')
 		self.app=QtGui.QApplication(params['argv'])
-		self.app.setStyle("cleanlooks")
 		self.name='gui'
 		self.docks=dict()
 		self.tabs=dict()
-		self.texts=dict()
 		self.createMainWindow(**params)
 		self.createDocks(**params)
 
@@ -42,7 +43,6 @@ class module(object):
 		self.setupDocks(**params)
 
 	def createMainWindow(self, **params):
-		#MainWindow and MdiArea
 		self.window=QtGui.QMainWindow()		
 		self.mdi=QtGui.QMdiArea()
 
@@ -72,7 +72,6 @@ class module(object):
 		self.tabs['info'].addTab(
 			params['iCeDeROM'].modules['log'].createQtWidget(**params),
 			params['iCeDeROM'].modules['log'].name)
-
 
 	def setupDocks(self, **params):
 		return
