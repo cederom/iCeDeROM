@@ -81,6 +81,7 @@ class module(QtGui.QTextEdit):
 		print 'CliPythonQt: No Python handler provided!'
 
 	def historyAppend(self, command):
+		if command.strip()=='': return
 		self.history.append(command)
 		self.history_index=len(self.history)
 		
