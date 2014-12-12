@@ -37,28 +37,36 @@ class iCeDeROM(object):
 			#Create the GUI MainWindow
 			import modules.ui.qt.QtMainWindow
 			module=modules.ui.qt.QtMainWindow.module(iCeDeROM=self, argv=sys.argv)
+			self.modules['log'].log.info('Loading '+module.name+' module...')
 			module.setup(iCeDeROM=self)
 			self.modules[module.name]=module
 			#Load example mdiWindow module
 			import modules.ui.qt.QtMdiChildExample
 			module=modules.ui.qt.QtMdiChildExample.module(iCeDeROM=self)
+			self.modules['log'].log.info('Loading '+module.name+' module...')
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
 			#Load Python Console module
 			import modules.cli.python
 			module=modules.cli.python.module(iCeDeROM=self)
+			self.modules['log'].log.info('Loading '+module.name+' module...')
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
-			#Log available modules
-			modlist=str('Loaded modules:')
-			for module in self.modules.keys(): modlist+=' '+module
-			self.modules['log'].log.info(modlist)
-			#When all is set start the GUI
+		#Load Drivers Module
+		import modules.interface.interface
+		module=modules.interface.interface.module(iCeDeROM=self)
+		self.modules['log'].log.info('Loading '+module.name+' module...')
+		module.setup(iCeDeROM=self)
+		module.start(iCeDeROM=self)
+		self.modules[module.name]=module		
+		#When all is set start the UI
+		if self.modules.has_key('gui'):
 			self.retval=self.modules['gui'].start()
-			self.modules['log'].log.info('iCeDeROM %s shutdown...', self.release)
-			self.modules['log'].stop()
+		self.modules['log'].log.info('iCeDeROM %s shutdown...', self.release)
+		self.modules['log'].stop()
+
 
 if __name__ == '__main__':
 	iCD=iCeDeROM(ui='qt')
