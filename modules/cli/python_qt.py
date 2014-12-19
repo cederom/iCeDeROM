@@ -15,13 +15,13 @@ class module(QtGui.QTextEdit):
 	"""
 	def __init__(self, **params):
 		"""Create Qt Widget for Python CLI."""
-		self.name='cli_python_qt'
-		self.tabs=dict()
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params['iCeDeROM'].modules.has_key('gui'):
 			raise KeyError('Python Console QtWidget requires GUI running!')
-		super(module, self).__init__()
+		super(module, self).__init__()		
+		self.name='cli_python_qt'
+		self.tabs=dict()		
 		self.setAcceptRichText(False)
 		self.setReadOnly(False)
 		self.setFontFamily("Courier")
