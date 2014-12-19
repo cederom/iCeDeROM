@@ -26,11 +26,12 @@ class module(object):
 		self.devices=dict()
 		self.capabilities=list()
 		self.device=None
+		self.ui=dict()
 		#Try to run GUI if possible
 		if params.has_key('iCeDeROM'):
 			if params['iCeDeROM'].ui=='qt':
 				import interface_qt
-				self.window=interface_qt.module(**params)
+				self.ui['qt']=interface_qt.module(**params)
 
 	def setup(self, **params):
 		"""Setup the iCeDeROM_Interface Module."""
@@ -44,30 +45,30 @@ class module(object):
 		"""Start the iCeDeROM_Interface Module."""
 		if params.has_key('iCeDeROM'):
 			if params['iCeDeROM'].ui=='qt':	
-				self.window.start(**params)
+				self.ui['qt'].start(**params)
 		return
 	
 	def stop(self, **params):
 		"""Stop the iCeDeROM_Interface Module."""
 		if params.has_key('iCeDeROM'):
 			if params['iCeDeROM'].ui=='qt':
-				self.window.stop(**params)		
+				self.ui['qt'].stop(**params)		
 		return
 
 	def list(self, **params):
 		"""
 		Returns dictionary of loaded interface devices.
 		This funcion will also log loaded interface devices
-		and update the list inside QtWidget if possible.
+		and update the list inside UI if possible.
 		Parameters:
 			iCeDeROM is the reference to the iCeDeROM object (optional).
 		"""
 		if params.has_key('iCeDeROM'):
 			params['iCeDeROM'].modules['log'].log.info(
 				'Loaded interface devices: '+str(self.devices.keys()))
-			if params['iCeDeROM'].ui=='qt':
+			if self.ui.has_key('qt'):
 				for dev in self.devices:
-					self.window.addDevice(iCeDeROM=params['iCeDeROM'], name=dev)
+					self.ui['qt'].addDevice(iCeDeROM=params['iCeDeROM'], name=dev)
 		return self.devices
 	
 	def load(self, **params):
@@ -75,6 +76,7 @@ class module(object):
 		Device object constructor is called here, but some devices may be
 		attached to a physical interface at setup() or start() stage
 		as additional configuration parameters may be obligatory to connect.
+		If device was already loaded it will be replaced by new load.
 		Params:
 			iCeDeROM (manatory)
 			name     is a driver module name (mandatory).
@@ -82,13 +84,13 @@ class module(object):
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		try:
-			if not self.devices.has_key(params['name']):
-				self.devices[params['name']]=__import__(params['name'], fromlist=['']).module()
-				params['iCeDeROM'].modules['log'].log.debug('Added '+params['name']+' interface device.')
-				return True
+			self.devices[params['name']]=__import__(params['name'], fromlist=['']).module(**params)
+			params['iCeDeROM'].modules['log'].log.debug('Added '+params['name']+' interface device.')
+			if self.ui.has_key('qt'):
+				self.ui['qt'].stacks['config'].addWidget(
+					self.devices[params['name']].ui['qt'])
 		except:
 			params['iCeDeROM'].modules['log'].log.exception('Cannot add '+params['name']+' interface device!')
-			return False
 
 	def loadAll(self, **params):
 		"""Load all interface devices according to module list defines."""

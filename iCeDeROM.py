@@ -54,13 +54,13 @@ class iCeDeROM(object):
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
-		#Load Drivers Module
+		#Load Interface Drivers Module
 		import modules.interface.interface
 		module=modules.interface.interface.module(iCeDeROM=self)
-		self.modules['log'].log.info('Loading '+module.name+' module...')
+		self.modules['log'].log.info('Loading '+module.name+' module...')				
+		self.modules[module.name]=module		
 		module.setup(iCeDeROM=self)
 		module.start(iCeDeROM=self)
-		self.modules[module.name]=module		
 		#When all is set start the UI
 		if self.modules.has_key('gui'):
 			self.retval=self.modules['gui'].start()

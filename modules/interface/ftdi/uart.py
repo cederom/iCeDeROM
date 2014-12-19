@@ -20,6 +20,12 @@ class module(object):
 		self.name='ftdi.uart'
 		self.capabilities=['uart']
 		self.isSetup=False
+		self.ui=dict()
+		#Try to run GUI if possible
+		if params.has_key('iCeDeROM'):
+			if params['iCeDeROM'].ui=='qt':
+				import uart_qt
+				self.ui['qt']=uart_qt.module(**params)		
 
 	def setup(self, **params):
 		"""Connect and/or Setup the pylibftdi device.
@@ -45,10 +51,12 @@ class module(object):
 		if params.has_key('baudrate'): self.device.baudrate=params['baudrate']
 
 	def start(self, **params):
-		return
+		if self.ui.has_key('qt'):
+			self.ui['qt'].start(**params)
 
 	def stop(self, **params):
-		return
+		if self.ui.has_key('qt'):
+			self.ui['qt'].stop(**params)
 
 	def write(self, **params):
 		self.device.write(data)
