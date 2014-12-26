@@ -85,6 +85,7 @@ class module(object):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		try:
 			self.devices[params['name']]=__import__(params['name'], fromlist=['']).module(**params)
+			self.devices[params['name']].parent=self
 			params['iCeDeROM'].modules['log'].log.debug('Added '+params['name']+' interface device.')
 			if self.ui.has_key('qt'):
 				self.ui['qt'].stacks['config'].addWidget(

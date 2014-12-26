@@ -63,6 +63,8 @@ class module(QtGui.QWidget):
 		self.layouts['device']=QtGui.QVBoxLayout(self.groups['device'])
 		self.lists['device']=QtGui.QListWidget()
 		self.buttons['default']=QtGui.QPushButton('Set Defatult Interface')
+		self.connect(self.buttons['default'],
+			QtCore.SIGNAL('clicked()'), lambda:self.test(**params))
 		self.layouts['device'].addWidget(self.lists['device'])
 		self.layouts['device'].addWidget(self.buttons['default'])
 		self.groups['config']=QtGui.QGroupBox('Configuration')
@@ -108,6 +110,7 @@ class module(QtGui.QWidget):
 			params['iCeDeROM'].modules['log'].log.warning(
 				'Device interface '+params['name']+' is not (yet) loaded!')
 
-			
-			
+	def test(self,**params):
+		params['iCeDeROM'].modules['interface'].devices['modules.interface.ftdi.uart'].write('iCeDeROM TEST...\n')
+
 			
