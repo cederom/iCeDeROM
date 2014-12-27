@@ -83,7 +83,9 @@ class module(object):
 		except:
 			if params.has_key('iCeDeROM'):
 				params['iCeDeROM'].modules['log'].log.exception('FTDI UART Interface setup failed!')
-				#TODO show message in error dialog
+				params['iCeDeROM'].modules['gui'].dialogs['message'].critical(
+					params['iCeDeROM'].modules['gui'].window,
+					'FTDI UART Interface', 'FTDI UART Interface setup failed!')
 			return False
 		if params.has_key('mode'):
 			self.devcfg['mode']=params['mode']

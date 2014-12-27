@@ -26,8 +26,10 @@ class module(object):
 		self.name='gui'
 		self.docks=dict()
 		self.tabs=dict()
+		self.dialogs=dict()
 		self.createMainWindow(**params)
 		self.createDocks(**params)
+		self.createDialogs(**params)
 
 	def start(self, **params):
 		self.window.show()
@@ -75,3 +77,7 @@ class module(object):
 
 	def setupDocks(self, **params):
 		return
+
+	def createDialogs(self, **params):
+		self.dialogs['message']=QtGui.QMessageBox(self.window)
+		
