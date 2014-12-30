@@ -9,7 +9,7 @@
 
 from PyQt4 import QtCore,QtGui
 
-class module(QtGui.QWidget):
+class module(QtGui.QTabWidget):
 	"""
 	Provides basic Qt GUI for iCeDeROM_Driver.
 	"""
@@ -28,6 +28,7 @@ class module(QtGui.QWidget):
 		self.stacks=dict()
 		self.id=None
 		self.createQtWidget(**params)
+		self.setupQtWidget(**params)
 		self.device=None
 
 	def setup(self, **params):
@@ -52,28 +53,26 @@ class module(QtGui.QWidget):
 		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(True)
 
 	def createQtWidget(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui!='qt':
-			raise Warning('Interface QtWidget requires Qt GUI running!')			
 		self.layouts['interface']=QtGui.QHBoxLayout(self)
 		self.groups['device']=QtGui.QGroupBox('Device')
-		self.groups['device'].setFixedWidth(250)
-		self.layouts['interface'].addWidget(self.groups['device'])
 		self.layouts['device']=QtGui.QVBoxLayout(self.groups['device'])
 		self.lists['device']=QtGui.QListWidget()
 		self.buttons['default']=QtGui.QPushButton('Set Defatult Interface')
+		self.groups['config']=QtGui.QGroupBox('Configuration')
+		self.layouts['config']=QtGui.QHBoxLayout(self.groups['config'])
+		self.stacks['config']=QtGui.QStackedWidget()
+
+	def setupQtWidget(self, **params):
+		self.groups['device'].setFixedWidth(250)
+		self.layouts['interface'].addWidget(self.groups['device'])
 		self.connect(self.buttons['default'],
 			QtCore.SIGNAL('clicked()'), lambda:self.test(**params))
 		self.layouts['device'].addWidget(self.lists['device'])
 		self.layouts['device'].addWidget(self.buttons['default'])
-		self.groups['config']=QtGui.QGroupBox('Configuration')
 		self.layouts['interface'].addWidget(self.groups['config'])
-		self.layouts['config']=QtGui.QHBoxLayout(self.groups['config'])
-		self.stacks['config']=QtGui.QStackedWidget()
 		self.layouts['config'].addWidget(self.stacks['config'])
 		self.layouts['config'].setContentsMargins(0,0,0,0)
-
+		
 	def addDevice(self, **params):
 		"""
 		Add Device Module to the devices list.
@@ -109,8 +108,3 @@ class module(QtGui.QWidget):
 		else:
 			params['iCeDeROM'].modules['log'].log.warning(
 				'Device interface '+params['name']+' is not (yet) loaded!')
-
-	def test(self,**params):
-		params['iCeDeROM'].modules['interface'].devices['modules.interface.ftdi.uart'].write('iCeDeROM TEST...\n')
-
-			
