@@ -27,6 +27,7 @@ class module(object):
 		self.docks=dict()
 		self.tabs=dict()
 		self.dialogs=dict()
+		self.labels=dict()
 		self.createMainWindow(**params)
 		self.createDocks(**params)
 		self.createDialogs(**params)
@@ -46,15 +47,41 @@ class module(object):
 
 	def createMainWindow(self, **params):
 		self.window=QtGui.QMainWindow()		
-		self.mdi=QtGui.QMdiArea()
+		self.mdi=QtGui.QMdiArea(self.window)
+		self.statusbar=QtGui.QStatusBar(self.window)
+		self.labels['filenameL']=QtGui.QLabel(self.window)
+		self.labels['filename']=QtGui.QLabel(self.window)
+		self.labels['interfaceL']=QtGui.QLabel(self.window)
+		self.labels['interface']=QtGui.QLabel(self.window)
+		self.labels['progress']=QtGui.QProgressBar(self.window)
+
 
 	def setupMainWindow(self, **params):
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
+		#Main Window
 		self.window.setCentralWidget(self.mdi)
 		self.window.setWindowTitle('iCeDeROM ('+params['iCeDeROM'].release+')')
+		#MDI
+		#self.mdi.setViewMode(QtGui.QMdiArea.TabbedView)
 		self.mdi.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		self.mdi.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
+		#Status Bar
+		self.window.setStatusBar(self.statusbar)
+		self.labels['filenameL'].setText('F:')
+		#TODO make filename label elice/truncate long strings and not impact window size
+		self.labels['filename'].setFrameStyle(QtGui.QFrame.StyledPanel|QtGui.QFrame.Sunken)
+		self.labels['filename'].setText('None')
+		self.labels['interfaceL'].setText('IF:')
+		self.labels['interface'].setFrameStyle(QtGui.QFrame.StyledPanel|QtGui.QFrame.Sunken)
+		self.labels['interface'].setWordWrap(False)
+		self.labels['interface'].setText('None')
+		self.labels['progress'].setTextVisible(False)
+		self.statusbar.addWidget(self.labels['filenameL'])
+		self.statusbar.addWidget(self.labels['filename'],10)
+		self.statusbar.addWidget(self.labels['interfaceL'])
+		self.statusbar.addWidget(self.labels['interface'])
+		self.statusbar.addPermanentWidget(self.labels['progress'])
 		self.window.showMaximized()
 		self.window.raise_()
 
@@ -80,4 +107,6 @@ class module(object):
 
 	def createDialogs(self, **params):
 		self.dialogs['message']=QtGui.QMessageBox(self.window)
+
+
 		
