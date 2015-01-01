@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'gui' (Qt4 based Main Window and GUI Core).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import sys,io
@@ -28,7 +28,10 @@ class module(object):
 		self.tabs=dict()
 		self.dialogs=dict()
 		self.labels=dict()
+		self.menu=None
+		self.menus=dict()
 		self.createMainWindow(**params)
+		self.createMenus(**params)
 		self.createDocks(**params)
 		self.createDialogs(**params)
 
@@ -43,10 +46,11 @@ class module(object):
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.setupMainWindow(**params)
+		self.setupMenus(**params)
 		self.setupDocks(**params)
 
 	def createMainWindow(self, **params):
-		self.window=QtGui.QMainWindow()		
+		self.window=QtGui.QMainWindow()
 		self.mdi=QtGui.QMdiArea(self.window)
 		self.statusbar=QtGui.QStatusBar(self.window)
 		self.labels['filenameL']=QtGui.QLabel(self.window)
@@ -55,7 +59,6 @@ class module(object):
 		self.labels['interface']=QtGui.QLabel(self.window)
 		self.labels['progress']=QtGui.QProgressBar(self.window)
 
-
 	def setupMainWindow(self, **params):
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
@@ -63,7 +66,6 @@ class module(object):
 		self.window.setCentralWidget(self.mdi)
 		self.window.setWindowTitle('iCeDeROM ('+params['iCeDeROM'].release+')')
 		#MDI
-		#self.mdi.setViewMode(QtGui.QMdiArea.TabbedView)
 		self.mdi.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		self.mdi.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAsNeeded)
 		#Status Bar
@@ -108,5 +110,47 @@ class module(object):
 	def createDialogs(self, **params):
 		self.dialogs['message']=QtGui.QMessageBox(self.window)
 
+	def createMenus(self, **params):
+		self.menu=self.window.menuBar()
+	
+	def setupMenus(self, **params):
+		self.menus['window']=self.menu.addMenu('Window')
+		self.menus['arrange']=self.menus['window'].addMenu('Arrange')
+		self.menus['arrange'].addAction('Tabs',self.setMdiTabbed)
+		self.menus['arrange'].addAction('Windows',self.setMdiWindowed)
+		self.menus['arrange'].addSeparator()
+		self.menus['arrange'].addAction('Cascade Windows',self.setMdiCascaded)
+		self.menus['arrange'].addAction('Tile Windows',self.setMdiTiled)
+		self.menus['help']=self.menu.addMenu('Help')
+		self.menus['help'].addAction('About iCeDeROM',lambda:self.aboutApplication(**params))
+		self.menus['help'].addAction('About Qt',self.aboutQt)
 
+	def setMdiTabbed(self):
+		self.mdi.setViewMode(QtGui.QMdiArea.TabbedView)
 		
+	def setMdiWindowed(self):
+		self.mdi.setViewMode(QtGui.QMdiArea.SubWindowView)
+
+	def setMdiCascaded(self):
+		self.mdi.cascadeSubWindows()
+	
+	def setMdiTiled(self):
+		self.mdi.tileSubWindows()
+	
+	def aboutApplication(self,**params):
+		if params.has_key('iCeDeROM'):
+			version='<br/>Version: <small>'+params['iCeDeROM'].release+'</small>'
+		else:
+			version=''
+		self.dialogs['message'].about(self.window,'About iCeDeROM',
+			'<center>\
+			<h1>iCeDeROM</h1>\
+			<br/>In-Circuit Evaluate Debug and Edit for Research on Microelectronics\
+			'+version+'\
+			<br/><a href="http://www.icederom.com">http://www.icederom.com</a>\
+			<br/><br/>(C) 2014-2015 Tomasz Boleslaw CEDRO\
+			<br/><a href="http://www.tomek.cedro.info">http://www.tomek.cedro.info</a>\
+			</center>')
+
+	def aboutQt(self):
+		self.dialogs['message'].aboutQt(self.window, 'About Qt')
