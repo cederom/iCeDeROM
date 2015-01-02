@@ -124,6 +124,7 @@ class module(object):
 		self.menus['help']=self.menu.addMenu('Help')
 		self.menus['help'].addAction('About iCeDeROM',lambda:self.aboutApplication(**params))
 		self.menus['help'].addAction('About Qt',self.aboutQt)
+		self.menus['modules']=self.menu.addMenu('Modules')
 
 	def setMdiTabbed(self):
 		self.mdi.setViewMode(QtGui.QMdiArea.TabbedView)
