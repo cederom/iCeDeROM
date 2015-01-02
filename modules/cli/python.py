@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'python' (provides python shell and scripting with QT GUI capabilities).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 #TODO: add file and script execution routine
 
@@ -38,8 +38,9 @@ class module(object):
 		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(False)
 		self.pythonQt.tabs[self.name]=params['iCeDeROM'].modules['gui'].tabs['info'].addTab(
 			self.pythonQt, 'python')
-		self.pythonQt.show()
 		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.pythonQt.show()
+
 	
 	def stop(self, **params):
 		if not params.has_key('iCeDeROM'):

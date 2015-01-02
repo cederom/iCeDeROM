@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'ftdi.uart' (provides UART comms with FTDI based interfaces).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import pylibftdi
@@ -95,11 +95,9 @@ class module(object):
 		if params.has_key('iCeDeROM'):
 			params['iCeDeROM'].modules['log'].log.info('FTDI UART Interface connected: vid='+
 				hex(self.devcfg['vid'])+' pid='+hex(self.devcfg['pid'])+' cfg='+str(cfg))
-		
-		#TODO remove the test comms
-		for i in range(0,100):
-			self.device.write('iCeDeROM TEST '+str(i)+'\r\n')
-		return True
+			#TODO verify set default method
+			params['iCeDeROM'].modules['gui'].labels['interface'].setText(self.name)
+			params['iCeDeROM'].modules['interface'].device=self
 
 	def start(self, **params):
 		if self.ui.has_key('qt'):
@@ -109,9 +107,9 @@ class module(object):
 		if self.ui.has_key('qt'):
 			self.ui['qt'].stop(**params)
 
-	def write(self, **params):
+	def write(self, data):
 		self.device.write(data)
 
-	def read(self, **params):
-		return self.device.read()
+	def read(self, length):
+		return self.device.read(length)
 

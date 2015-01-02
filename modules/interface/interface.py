@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'interface' (provides physical/electrical interface driver comms).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 devices = ['modules.interface.ftdi.uart'] #'modules.interface.ftdi.bitbang']
@@ -22,7 +22,10 @@ class module(object):
 		Parameters:
 			iCeDeROM is the reference to the iCeDeROM object.
 		"""
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.name='interface'
+		self.iCeDeROM=params['iCeDeROM']
 		self.devices=dict()
 		self.capabilities=list()
 		self.device=None
@@ -113,6 +116,17 @@ class module(object):
 			raise KeyError('name parameter reference mandatory!')
 		if self.devices.has_key(params['name']):
 			self.device=self.devices[params['name']]
+			params['iCeDeROM'].modules['gui'].labels['interface'].setText(self.device.name)
 			params['iCeDeROM'].modules['log'].log.info('Selected '+params['name']+' as the default interface device.')
 		else:
 			params['iCeDeROM'].modules['log'].log.warning('Interface device '+params['name']+' is not yet loaded!')
+
+	def write(self, data):
+		if self.device==None:
+			raise IOError('Interface not yet initialized!')
+		self.device.write(data)
+			
+	def read(self, length):
+		if self.device==None:
+			raise IOError('Interface not yet initialized!')
+		return self.device.read(length)
