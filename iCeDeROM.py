@@ -61,6 +61,13 @@ class iCeDeROM(object):
 		self.modules[module.name]=module		
 		module.setup(iCeDeROM=self)
 		module.start(iCeDeROM=self)
+		#Load the Terminal Module
+		import modules.cli.terminal
+		module=modules.cli.terminal.module(iCeDeROM=self)
+		self.modules['log'].log.info('Loading '+module.name+' module...')				
+		self.modules[module.name]=module		
+		module.setup(iCeDeROM=self)
+		module.start(iCeDeROM=self)		
 		#When all is set start the UI
 		if self.modules.has_key('gui'):
 			self.retval=self.modules['gui'].start()

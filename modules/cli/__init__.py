@@ -8,5 +8,7 @@
 
 __all__ = [
 'python',
-'python_qt'
+'python_qt',
+'terminal',
+'terminal_qt'
 ]
