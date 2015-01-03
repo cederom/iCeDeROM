@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'python_qt' (provides QtWidget for modules.cli.python iCeDeROM module.
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 from PyQt4 import QtCore,QtGui
@@ -15,12 +15,13 @@ class module(QtGui.QTextEdit):
 	"""
 	def __init__(self, **params):
 		"""Create Qt Widget for Python CLI."""
+		self.name='cli_python_qt'		
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params['iCeDeROM'].modules.has_key('gui'):
-			raise KeyError('Python Console QtWidget requires GUI running!')
+			raise RuntimeError('Python Console QtWidget requires GUI running!')
+		self.iCeDeROM=params['iCeDeROM']
 		super(module, self).__init__()		
-		self.name='cli_python_qt'
 		self.tabs=dict()		
 		self.setAcceptRichText(False)
 		self.setReadOnly(False)

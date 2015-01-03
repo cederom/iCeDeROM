@@ -14,33 +14,27 @@ class module(object):
 		Create Module and QtWidget if necessary.
 		Parameters:
 			iCeDeROM module reference (mandatory).
-		"""		
+		"""
+		self.name='terminal'		
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		self.name='terminal'
-		self.ui=dict()
 		self.iCeDeROM=params['iCeDeROM']
-		if params['iCeDeROM'].ui=='qt':
+		self.ui=dict()		
+		if self.iCeDeROM.ui=='qt':
 			import terminal_qt
 			self.ui['qt']=terminal_qt.module(**params)
 			self.ui['qt'].parent=self
 
 	def setup(self,**params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui=='qt':
+		if self.iCeDeROM.ui=='qt':
 			self.ui['qt'].setup(**params)
 
 	def start(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui=='qt':
+		if self.iCeDeROM.ui=='qt':
 			self.ui['qt'].start(**params)
 
 	def stop(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui=='qt':
+		if self.iCeDeROM.ui=='qt':
 			self.ui['qt'].stop(**params)
 
 	def write(self, data):

@@ -18,44 +18,39 @@ class module(object):
 	"""
 	def __init__(self, **params):
 		"""
-		Creates iCeDeROM_Interface Module.
+		Create iCeDeROM_Interface Module.
 		Parameters:
 			iCeDeROM is the reference to the iCeDeROM object.
 		"""
+		self.name='interface'
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		self.name='interface'
 		self.iCeDeROM=params['iCeDeROM']
 		self.devices=dict()
 		self.capabilities=list()
 		self.device=None
 		self.ui=dict()
 		#Try to run GUI if possible
-		if params.has_key('iCeDeROM'):
-			if params['iCeDeROM'].ui=='qt':
-				import interface_qt
-				self.ui['qt']=interface_qt.module(**params)
+		if self.iCeDeROM.ui=='qt':
+			import interface_qt
+			self.ui['qt']=interface_qt.module(**params)
 
 	def setup(self, **params):
 		"""Setup the iCeDeROM_Interface Module."""
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.loadAll(**params)
 		self.list(**params)
 		return
 	
 	def start(self, **params):
 		"""Start the iCeDeROM_Interface Module."""
-		if params.has_key('iCeDeROM'):
-			if params['iCeDeROM'].ui=='qt':	
-				self.ui['qt'].start(**params)
+		if self.iCeDeROM.ui=='qt':
+			self.ui['qt'].start(**params)
 		return
 	
 	def stop(self, **params):
 		"""Stop the iCeDeROM_Interface Module."""
-		if params.has_key('iCeDeROM'):
-			if params['iCeDeROM'].ui=='qt':
-				self.ui['qt'].stop(**params)		
+		if self.iCeDeROM.ui=='qt':
+			self.ui['qt'].stop(**params)		
 		return
 
 	def list(self, **params):
@@ -63,15 +58,12 @@ class module(object):
 		Returns dictionary of loaded interface devices.
 		This funcion will also log loaded interface devices
 		and update the list inside UI if possible.
-		Parameters:
-			iCeDeROM is the reference to the iCeDeROM object (optional).
 		"""
-		if params.has_key('iCeDeROM'):
-			params['iCeDeROM'].modules['log'].log.info(
-				'Loaded interface devices: '+str(self.devices.keys()))
-			if self.ui.has_key('qt'):
-				for dev in self.devices:
-					self.ui['qt'].addDevice(iCeDeROM=params['iCeDeROM'], name=dev)
+		self.iCeDeROM.modules['log'].log.info(
+			'Loaded interface devices: '+str(self.devices.keys()))
+		if self.ui.has_key('qt'):
+			for dev in self.devices:
+				self.ui['qt'].addDevice(name=dev)
 		return self.devices
 	
 	def load(self, **params):
@@ -81,45 +73,40 @@ class module(object):
 		as additional configuration parameters may be obligatory to connect.
 		If device was already loaded it will be replaced by new load.
 		Params:
-			iCeDeROM (manatory)
 			name     is a driver module name (mandatory).
 		"""
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
 		try:
+			params['iCeDeROM']=self.iCeDeROM
 			self.devices[params['name']]=__import__(params['name'], fromlist=['']).module(**params)
 			self.devices[params['name']].parent=self
-			params['iCeDeROM'].modules['log'].log.debug('Added '+params['name']+' interface device.')
+			self.iCeDeROM.modules['log'].log.debug('Added '+params['name']+' interface device.')
 			if self.ui.has_key('qt'):
 				self.ui['qt'].stacks['config'].addWidget(
 					self.devices[params['name']].ui['qt'])
 		except:
-			params['iCeDeROM'].modules['log'].log.exception('Cannot add '+params['name']+' interface device!')
+			self.iCeDeROM.modules['log'].log.exception('Cannot add '+params['name']+' interface device!')
 
 	def loadAll(self, **params):
 		"""Load all interface devices according to module list defines."""
 		for dev in devices:
-			self.load(iCeDeROM=params['iCeDeROM'], name=dev)
+			self.load(name=dev)
 		
 	def setDefault(self, **params):
 		"""
 		Select the default device for iCeDeROM_Interface Module.
 		Device must be already loaded to devices dict with prior load() call.
 		Parameters:
-			iCeDeROM is the reference to the iCeDeROM object.
 			name     is the name of interface to be selected as default.
 		"""
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params.has_key('name'):
-			params['iCeDeROM'].modules['log'].error('name parameter reference mandatory!')
+			self.iCeDeROM.modules['log'].error('name parameter reference mandatory!')
 			raise KeyError('name parameter reference mandatory!')
 		if self.devices.has_key(params['name']):
 			self.device=self.devices[params['name']]
-			params['iCeDeROM'].modules['gui'].labels['interface'].setText(self.device.name)
-			params['iCeDeROM'].modules['log'].log.info('Selected '+params['name']+' as the default interface device.')
+			self.iCeDeROM.modules['gui'].labels['interface'].setText(self.device.name)
+			self.iCeDeROM.modules['log'].log.info('Selected '+params['name']+' as the default interface device.')
 		else:
-			params['iCeDeROM'].modules['log'].log.warning('Interface device '+params['name']+' is not yet loaded!')
+			self.iCeDeROM.modules['log'].log.warning('Interface device '+params['name']+' is not yet loaded!')
 
 	def write(self, data):
 		if self.device==None:

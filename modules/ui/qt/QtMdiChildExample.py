@@ -3,8 +3,8 @@
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
-# Module 'QtMdiChildExample' (example of iCeDeROM Module with mdiChildWindow Qt GUI).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# Module 'QtMdiChildExample' (example of iCeDeROM Module with mdiChildWindow QtWidget).
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import os
@@ -19,21 +19,28 @@ class module(object):
 		Create Module and QtWidget.
 		Parameters:
 			iCeDeROM module reference (mandatory).
-		"""		
+		"""
+		self.name='QtMdiChildExampleModule'		
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		self.name='QtMdiChildExampleModule'
-		if params['iCeDeROM'].ui=='qt':
-			self.window=QtWindow(**params)
+		if params['iCeDeROM'].ui!='qt':
+			raise RuntimeError('Interface QtWidget requires Qt GUI running!')
+		self.iCeDeROM=params['iCeDeROM']
+		self.ui=dict()
+		if self.iCeDeROM.ui=='qt':
+			self.ui['qt']=QtWidget(**params)
+
 	def setup(self,**params):
-		self.window.setup(**params)
+		self.ui['qt'].setup(**params)
+		
 	def start(self, **params):
-		self.window.start(**params)
+		self.ui['qt'].start(**params)
+		
 	def stop(self, **params):
-		self.window.stop(**params)
+		self.ui['qt'].stop(**params)
 
 
-class QtWindow(QtGui.QMainWindow):
+class QtWidget(QtGui.QMainWindow):
 	"""Example Module, Qt mdiChildWindow."""
 	def __init__(self, **params):
 		"""
@@ -41,16 +48,17 @@ class QtWindow(QtGui.QMainWindow):
 		Parameters:
 			iCeDeROM module reference (mandatory).
 		"""
+		self.name='QtMdiChildExampleWindow'
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		super(QtWindow, self).__init__()
-		self.name='QtMdiChildExampleWindow'
+		self.iCeDeROM=params['iCeDeROM']
+		super(QtWidget, self).__init__()
 		self.uifile=os.path.join(os.path.dirname(os.path.relpath(__file__)))+'/'+uifilename
 		self.window=uic.loadUi(self.uifile, self)
 		try:
-			params['iCeDeROM'].modules['gui'].mdi.addSubWindow(self.window)
+			self.iCeDeROM.modules['gui'].mdi.addSubWindow(self.window)
 		except:
-			params['iCeDeROM'].modules['log'].log.critical('Cannot addSubWindow!')
+			self.iCeDeROM.modules['log'].log.critical('Cannot addSubWindow!')
 			raise
 		self.window.setWindowTitle('QtMdiChildExample')
 		self.window.connect(self.window.pushButton, QtCore.SIGNAL('clicked()'), lambda:self.listModules(**params))
@@ -63,16 +71,12 @@ class QtWindow(QtGui.QMainWindow):
 		self.window.hide()
 
 	def listModules(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.window.textBrowser.clear()
 		self.window.textBrowser.append('Available Modules:')
-		for module in params['iCeDeROM'].modules:
+		for module in self.iCeDeROM.modules:
 			self.window.textBrowser.append(module)
 
 	def logMessage(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		params['iCeDeROM'].modules['log'].log.info(self.window.logInput.toPlainText())
+		self.iCeDeROM.modules['log'].log.info(self.window.logInput.toPlainText())
 		self.window.logInput.clear()
 			

@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'ftdi.uart_qt' (provides Qt GUI for ftdi.uart configuration).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 from PyQt4 import QtCore,QtGui
@@ -16,12 +16,13 @@ class module(QtGui.QWidget):
 	"""
 	def __init__(self, **params):
 		"""Create QtWidget."""
+		self.name='ftdi.uart_qt'		
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if params['iCeDeROM'].ui!='qt':
-			raise Warning('Interface QtWidget requires Qt GUI running!')
+			raise RuntimeError('Interface QtWidget requires Qt GUI running!')
+		self.iCeDeROM=params['iCeDeROM']
 		super(module, self).__init__()
-		self.name='ftdi.uart_qt'
 		self.buttons=dict()
 		self.layouts=dict()
 		self.trees=dict()
@@ -42,29 +43,23 @@ class module(QtGui.QWidget):
 	
 	def start(self, **params):
 		'''Start the QtWidget and attach it to Device Interface Configuration stack widget.'''
-		if not params.has_key('iCeDeROM'):
-			raise Warning('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui!='qt':
-			raise Warning('Interface QtWidget requires Qt GUI running!')			
+		if self.iCeDeROM.ui!='qt':
+			raise RuntimeError('Interface QtWidget requires Qt GUI running!')			
 		#attach configuration widget
-		self.id=params['iCeDeROM'].modules['interface'].ui['qt'].stacks['config'].addWidget(self)
+		self.id=self.iCeDeROM.modules['interface'].ui['qt'].stacks['config'].addWidget(self)
 
 
 	def stop(self, **params):
 		'''Stop the QtWidget and detach it from the Device Interface Configuration stack widget.'''
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui!='qt':
-			raise Warning('Interface QtWidget requires Qt GUI running!')
+		if self.iCeDeROM.ui!='qt':
+			raise RuntimeError('Interface QtWidget requires Qt GUI running!')
 		#detach configuration widget
-		params['iCeDeROM'].modules['interface'].ui['qt'].stacks['config'].removeWidget(self)
+		self.iCeDeROM.modules['interface'].ui['qt'].stacks['config'].removeWidget(self)
 
 
 	def createQtWidget(self, **params):
 		'''Create the QtWidget elements.'''
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if params['iCeDeROM'].ui!='qt':
+		if self.iCeDeROM.ui!='qt':
 			raise Warning('Interface QtWidget requires Qt GUI running!')
 		self.layouts['config']=QtGui.QVBoxLayout(self)
 		self.layouts['config'].setContentsMargins(5,5,5,5)		
@@ -157,15 +152,12 @@ class module(QtGui.QWidget):
 		"""
 		Add Device Module to the devices list.
 		Parameters:
-			iCeDeROM  is the reference to the iCeDeROM object.
 			name      is the name of interface module to add.
 		"""
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params.has_key('name'):
 			raise KeyError('name parameter reference mandatory!')
-		if params['iCeDeROM'].ui!='qt':
-			raise Warning('Interface QtWidget requires Qt GUI running!')
+		if self.iCeDeROM.ui!='qt':
+			raise RuntimeError('Interface QtWidget requires Qt GUI running!')
 		self.lists['device'].addItem(params['name'])
 
 

@@ -15,13 +15,13 @@ class module(QtGui.QWidget):
 	"""
 	def __init__(self, **params):
 		"""Create Qt Widget for Terminal CLI."""
+		self.name='terminal_qt'		
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if not params['iCeDeROM'].modules.has_key('gui'):
-			raise KeyError('Terminal QtWidget requires GUI running!')
+			raise RuntimeError('Terminal QtWidget requires GUI running!')
+		self.iCeDeROM=params['iCeDeROM']		
 		super(module, self).__init__()
-		self.name='terminal_qt'
-		self.iCeDeROM=params['iCeDeROM']
 		self.parent=None
 		self.texts=dict()
 		self.layouts=dict()

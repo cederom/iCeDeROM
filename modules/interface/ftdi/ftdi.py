@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'ftdi.uart' (provides UART comms with FTDI based interfaces).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 interfaces = {

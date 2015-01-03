@@ -3,7 +3,7 @@
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import sys
@@ -21,7 +21,7 @@ class iCeDeROM(object):
 		self.modules=dict()
 		#Setup LOG module (mandatory)
 		import modules.log.log
-		module=modules.log.log.module()
+		module=modules.log.log.module(iCeDeROM=self)
 		module.setup()
 		self.modules[module.name]=module
 		#GIT related stuff (mandatory)

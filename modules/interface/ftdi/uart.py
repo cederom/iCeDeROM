@@ -18,6 +18,9 @@ class module(object):
 		Note: Use Setup routine to connect to a physical Device.
 		"""
 		self.name='ftdi.uart'
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
+		self.iCeDeROM=params['iCeDeROM']			
 		self.capabilities=['uart']
 		self.isSetup=False
 		self.ui=dict()
@@ -25,11 +28,10 @@ class module(object):
 		self.parent=None
 		self.baudrates=[300,1200,2400,4800,9600,14400,19200,28800,38400,57600,115200,230400]
 		#Try to run GUI if possible
-		if params.has_key('iCeDeROM'):
-			if params['iCeDeROM'].ui=='qt':
-				params['parent']=self
-				import uart_qt
-				self.ui['qt']=uart_qt.module(**params)
+		if self.iCeDeROM.ui=='qt':
+			import uart_qt
+			params['parent']=self
+			self.ui['qt']=uart_qt.module(**params)
 
 	def setup(self, **params):
 		"""Connect and/or Setup the pylibftdi device.
@@ -81,9 +83,9 @@ class module(object):
 		try:
 			self.device=pylibftdi.Device(**cfg)
 		except:
-			if params.has_key('iCeDeROM'):
-				params['iCeDeROM'].modules['log'].log.exception('FTDI UART Interface setup failed!')
-				params['iCeDeROM'].modules['gui'].dialogs['message'].critical(
+			self.iCeDeROM.modules['log'].log.exception('FTDI UART Interface setup failed!')
+			if self.iCeDeROM.modules.has_key('gui'):
+				self.iCeDeROM.modules['gui'].dialogs['message'].critical(
 					params['iCeDeROM'].modules['gui'].window,
 					'FTDI UART Interface', 'FTDI UART Interface setup failed!')
 			return False
@@ -92,12 +94,11 @@ class module(object):
 		if params.has_key('baudrate'):
 			self.devcfg['baudrate']=int(params['baudrate'])
 			self.device.baudrate=self.devcfg['baudrate']
-		if params.has_key('iCeDeROM'):
-			params['iCeDeROM'].modules['log'].log.info('FTDI UART Interface connected: vid='+
+		self.iCeDeROM.modules['log'].log.info('FTDI UART Interface connected: vid='+
 				hex(self.devcfg['vid'])+' pid='+hex(self.devcfg['pid'])+' cfg='+str(cfg))
-			#TODO verify set default method
-			params['iCeDeROM'].modules['gui'].labels['interface'].setText(self.name)
-			params['iCeDeROM'].modules['interface'].device=self
+		#TODO verify set default method
+		self.iCeDeROM.modules['gui'].labels['interface'].setText(self.name)
+		self.iCeDeROM.modules['interface'].device=self
 
 	def start(self, **params):
 		if self.ui.has_key('qt'):

@@ -18,10 +18,12 @@ class module(object):
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='python'
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
+		self.iCeDeROM=params['iCeDeROM']		
 		self.python=code.InteractiveConsole(params)
-		#Create GUI part if necessary
-		if not params.has_key('iCeDeROM'): return
-		if not params['iCeDeROM'].modules.has_key('gui'): return
+		#Create GUI part if possible
+		if not self.iCeDeROM.modules.has_key('gui'): return
 		self.pythonQt=python_qt.module(**params)
 		code.sys.stdout=self.pythonQt
 		self.pythonQt.execute=self.python.push
@@ -32,24 +34,20 @@ class module(object):
 		return
 	
 	def start(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if not params['iCeDeROM'].modules.has_key('gui'): return
-		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		self.pythonQt.tabs[self.name]=params['iCeDeROM'].modules['gui'].tabs['info'].addTab(
+		if not self.iCeDeROM.modules.has_key('gui'): return
+		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(False)
+		self.pythonQt.tabs[self.name]=self.iCeDeROM.modules['gui'].tabs['info'].addTab(
 			self.pythonQt, 'python')
-		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(True)
 		self.pythonQt.show()
 
 	
 	def stop(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if not params['iCeDeROM'].modules.has_key('gui'): return
-		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		params['iCeDeROM'].modules['gui'].tabs['info'].removeTab(self.tabs[self.name])
+		if not self.iCeDeROM.modules.has_key('gui'): return
+		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(False)
+		self.iCeDeROM.modules['gui'].tabs['info'].removeTab(self.tabs[self.name])
 		self.texts[self.name].hide()
-		params['iCeDeROM'].modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(True)
 
 	def execute(self, command):
 		self.python.resetbuffer()

@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'log' (provides logging capabilities).
-# (C) 2014 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import logging
@@ -25,6 +25,9 @@ class module(object):
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='log'
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
+		self.iCeDeROM=params['iCeDeROM']		
 		self.texts=dict()
 		self.log=logging.getLogger('iCeDeROM')
 		self.filename=default_filename
@@ -99,17 +102,15 @@ class module(object):
 		self.stream.setLevel(level)
 		self.file.setLevel(level)
 
-	def createQtWidget(self, **params):
-		if not params.has_key('iCeDeROM'):
-			raise KeyError('iCeDeROM parameter reference mandatory!')		
+	def createQtWidget(self, **params):		
 		self.texts[self.name]=QtGui.QTextEdit()
 		self.texts[self.name].setAcceptRichText(False)
 		self.texts[self.name].setReadOnly(True)
 		self.texts[self.name].setFontFamily("Courier")
 		self.texts[self.name].show()
-		self.logfswatcher=QtCore.QFileSystemWatcher([params['iCeDeROM'].modules[self.name].filename])
+		self.logfswatcher=QtCore.QFileSystemWatcher([self.filename])
 		self.logfswatcher.connect(self.logfswatcher, QtCore.SIGNAL('fileChanged(QString)'),self.logFileWatcher)
-		self.logfp=io.open(params['iCeDeROM'].modules[self.name].filename,'rt')
+		self.logfp=io.open(self.filename,'rt')
 		return self.texts[self.name]
 
 	@QtCore.pyqtSlot(str)
