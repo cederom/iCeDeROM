@@ -66,7 +66,7 @@ iCeDeROM is supposed to work as standalone application, but it should be also po
 
 Modular design makes it possible to add new functionalities easily by use of existing software components that provide Python bindings. It should be also possible to interact with binaries and libraries that have no Python bindings. External modules and applications should be wrapped and adapted to work with iCeDeROM. Yet, no stable API is established. Below a functional proposition is presented.
 
-modules/example/example.py:
+Here is an example Core Module - a set of objects and functions wrapped in a Python Module:
 ```python
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
@@ -122,7 +122,7 @@ class module(object):
 	#you can define other methods for your module here
 ```
 
-modules/example/example_qt.py:
+Here is an example of standalone Module that provides QtWidget GUI implemented with QtDesigner / UI creator:
 ```python
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
@@ -186,5 +186,85 @@ class QtWidget(QtGui.QMainWindow):
 		self.window.logInput.clear()
 			
 ```
+
+Here is an example of Module that provides QtWidget for a Terminal Core Module, but all Qt components are coded inside:
+```python
+#!/usr/bin/env python
+# -*- coding: UTF-8 -*-
+# vim: set fileencoding=UTF-8 :
+#
+# Here is the code for iCeDeROM Terminal GUI / QtWidget.
+# All Qt components are hardcoded here, no UI creator was used.
+
+from PyQt4 import QtCore,QtGui
+
+class module(QtGui.QWidget):
+	"""
+	Provides Qt Widget for modules.cli.terminal iCeDeROM module.
+	"""
+	def __init__(self, **params):
+		"""Create Qt Widget for Terminal CLI."""
+		self.name='terminal_qt'		
+		if not params.has_key('iCeDeROM'):
+			raise KeyError('iCeDeROM parameter reference mandatory!')
+		if not params['iCeDeROM'].modules.has_key('gui'):
+			raise RuntimeError('Terminal QtWidget requires GUI running!')
+		self.iCeDeROM=params['iCeDeROM']		
+		super(module, self).__init__()
+		self.parent=params['parent'] if params.has_key('parent') else None
+		self.texts=dict()
+		self.layouts=dict()
+		self.menus=dict()
+		self.actions=dict()
+		self.createQtWidget(**params)
+		self.setupQtWidget(**params)
+
+	def setup(self, **params):	
+		return
+	
+	def start(self, **params):
+		self.iCeDeROM.modules['gui'].mdi.addSubWindow(self)
+		self.show()
+	
+	def stop(self, **params):
+		self.hide()
+
+	def createQtWidget(self, **params):
+		self.layouts[self.name]=QtGui.QVBoxLayout(self)
+		self.texts[self.name]=QtGui.QPlainTextEdit()
+		self.menu=QtGui.QMenu('Terminal')
+
+	def setupQtWidget(self, **params):
+		self.setWindowTitle('Terminal')
+		self.layouts[self.name].setContentsMargins(0,0,0,0)
+		self.layouts[self.name].addWidget(self.texts[self.name])
+		self.texts[self.name].setReadOnly(False)
+		self.texts[self.name].keyPressEvent=self.keyPressEvent
+		self.texts[self.name].startTimer(0)
+		self.texts[self.name].timerEvent=self.timerEvent
+		self.actions['source']=self.menu.addAction('Test',self.test)
+		self.iCeDeROM.modules['gui'].menus['modules'].addMenu(self.menu)
+		
+	def keyPressEvent(self, QKeyEvent):
+		if self.iCeDeROM.modules['interface'].device==None: return
+		try:
+			self.parent.write(QKeyEvent.text())
+		except:
+			self.iCeDeROM.modules['log'].log.exception('Write failed!')
+
+	def timerEvent(self, QTimerEvent):
+		if self.iCeDeROM.modules['interface'].device==None: return
+		self.write(self.iCeDeROM.modules['interface'].device.read(128))
+
+	def write(self, data):
+		self.texts[self.name].insertPlainText(data)
+		self.texts[self.name].moveCursor(
+			QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
+		
+	def test(self):
+		self.iCeDeROM.modules['gui'].dialogs['message'].information(
+			self,'Terminal','This is a Terminal Menu Test...')
+```
+
 
 <small>iCeDeROM (C) 2014-2015 Tomasz Bolesław CEDRO, All rights reserved :-)</small> <a href="http://www.icederom.com">http://www.iCeDeROM.com</a>
