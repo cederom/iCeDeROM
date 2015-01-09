@@ -38,16 +38,16 @@ class module(QtGui.QTabWidget):
 	def start(self, **params):
 		if self.iCeDeROM.ui!='qt':
 			raise RuntimeError('Interface QtWidget requires Qt GUI running!')			
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		self.id=self.iCeDeROM.modules['gui'].tabs['info'].addTab(self, 'interface')
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(False)
+		self.id=self.iCeDeROM.modules['gui'].tabs['system'].addTab(self, 'interface')
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
 
 	def stop(self, **params):
 		if self.iCeDeROM.ui!='qt':
 			raise RuntimeError('Interface QtWidget requires Qt GUI running!')	
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		self.iCeDeROM.modules['gui'].tabs['info'].delTab(self.id)
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(False)
+		self.iCeDeROM.modules['gui'].tabs['system'].delTab(self.id)
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
 
 	def createQtWidget(self, **params):
 		self.layouts['interface']=QtGui.QHBoxLayout(self)

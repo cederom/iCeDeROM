@@ -35,19 +35,19 @@ class module(object):
 	
 	def start(self, **params):
 		if not self.iCeDeROM.modules.has_key('gui'): return
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		self.pythonQt.tabs[self.name]=self.iCeDeROM.modules['gui'].tabs['info'].addTab(
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(False)
+		self.pythonQt.tabs[self.name]=self.iCeDeROM.modules['gui'].tabs['system'].addTab(
 			self.pythonQt, 'python')
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
 		self.pythonQt.show()
 
 	
 	def stop(self, **params):
 		if not self.iCeDeROM.modules.has_key('gui'): return
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(False)
-		self.iCeDeROM.modules['gui'].tabs['info'].removeTab(self.tabs[self.name])
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(False)
+		self.iCeDeROM.modules['gui'].tabs['system'].removeTab(self.tabs[self.name])
 		self.texts[self.name].hide()
-		self.iCeDeROM.modules['gui'].tabs['info'].setUpdatesEnabled(True)
+		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
 
 	def execute(self, command):
 		self.python.resetbuffer()

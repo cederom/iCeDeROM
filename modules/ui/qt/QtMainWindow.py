@@ -87,17 +87,17 @@ class module(object):
 		self.window.raise_()
 
 	def createDocks(self, **params):
-		#Information Dock and its contents
-		self.tabs['info']=QtGui.QTabWidget()
-		self.docks['info']=QtGui.QDockWidget()
-		self.docks['info'].setWindowTitle('info')
-		self.docks['info'].setMinimumSize(250,50)
-		self.docks['info'].setFeatures(
+		#System Dock and its contents
+		self.tabs['system']=QtGui.QTabWidget()
+		self.docks['system']=QtGui.QDockWidget()
+		self.docks['system'].setWindowTitle('System')
+		self.docks['system'].setMinimumSize(250,50)
+		self.docks['system'].setFeatures(
 			QtGui.QDockWidget.DockWidgetVerticalTitleBar|
 			QtGui.QDockWidget.AllDockWidgetFeatures)
-		self.docks['info'].setWidget(self.tabs['info'])
-		self.window.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.docks['info'])
-		self.tabs['info'].addTab(
+		self.docks['system'].setWidget(self.tabs['system'])
+		self.window.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.docks['system'])
+		self.tabs['system'].addTab(
 			self.iCeDeROM.modules['log'].createQtWidget(**params),
 			self.iCeDeROM.modules['log'].name)
 
@@ -118,10 +118,10 @@ class module(object):
 		self.menus['arrange'].addSeparator()
 		self.menus['arrange'].addAction('Cascade Windows',self.setMdiCascaded)
 		self.menus['arrange'].addAction('Tile Windows',self.setMdiTiled)
+		self.menus['modules']=self.menu.addMenu('Modules')		
 		self.menus['help']=self.menu.addMenu('Help')
 		self.menus['help'].addAction('About iCeDeROM',lambda:self.aboutApplication(**params))
 		self.menus['help'].addAction('About Qt',self.aboutQt)
-		self.menus['modules']=self.menu.addMenu('Modules')
 
 	def setMdiTabbed(self):
 		self.mdi.setViewMode(QtGui.QMdiArea.TabbedView)
