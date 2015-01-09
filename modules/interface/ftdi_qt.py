@@ -101,7 +101,7 @@ class module(QtGui.QWidget):
 			self.buttons['interface'].insertItem(0,interface)
 		if self.defaults['interface']!=None:
 			i=self.buttons['interface'].findText(self.defaults['interface'])
-			if i>=0: self.buttons['interface'].setCurrentIndex(i)	
+			if i>=0: self.buttons['interface'].setCurrentIndex(i)
 		#Serial		
 		self.trees['serial']=QtGui.QTreeWidgetItem(self.trees['device'],
 			['serial', '', 'Serial number of the same VID/PID interface if you have more than one connected.'])
@@ -145,7 +145,9 @@ class module(QtGui.QWidget):
 		self.trees['config'].setItemWidget(self.trees['encoding'],1,self.buttons['encoding']) 
 		#Connect signals
 		self.connect(self.buttons['interface'],
-			QtCore.SIGNAL('activated(int)'), self.updateInterfaceParameters)	
+			QtCore.SIGNAL('activated(int)'), self.updateInterfaceParameters)
+		#Update default confguration parameters
+		self.updateInterfaceParameters(**params)
 
 
 	def addDevice(self, **params):
