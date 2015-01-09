@@ -7,7 +7,7 @@
 # (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-devices = ['modules.interface.ftdi.uart'] #'modules.interface.ftdi.bitbang']
+devices = ['modules.interface.ftdi']
 
 class module(object):
 	"""

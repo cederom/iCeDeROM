@@ -73,7 +73,7 @@ class module(QtGui.QWidget):
 		self.buttons['apply']=QtGui.QPushButton('Apply Configuration')
 		self.layouts['config'].addWidget(self.buttons['apply'])
 		self.connect(self.buttons['apply'],
-			QtCore.SIGNAL('clicked()'), lambda:self.configApply(**params))		
+			QtCore.SIGNAL('clicked()'), lambda:self.configApply(**params))
 		#Populate the TreeWidget
 		self.trees['config'].setHeaderItem(QtGui.QTreeWidgetItem(['parameter','value','descrption']))
 		self.trees['config'].setColumnWidth(1,150)

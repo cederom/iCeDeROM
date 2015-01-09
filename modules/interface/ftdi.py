@@ -9,6 +9,11 @@
 
 import pylibftdi
 
+interfaces = {
+'Custom':{'vid':0x0000, 'pid':0x0000, 'uart_interface':''},
+'KT-LINK':{'vid':0x0403 ,'pid':0xbbe2, 'uart_interface':2}
+}
+
 class module(object):
 	"""
 	Provides UART comms with FTDI based interfaces.
@@ -29,9 +34,9 @@ class module(object):
 		self.baudrates=[300,1200,2400,4800,9600,14400,19200,28800,38400,57600,115200,230400]
 		#Try to run GUI if possible
 		if self.iCeDeROM.ui=='qt':
-			import uart_qt
+			import ftdi_qt
 			params['parent']=self
-			self.ui['qt']=uart_qt.module(**params)
+			self.ui['qt']=ftdi_qt.module(**params)
 
 	def setup(self, **params):
 		"""Connect and/or Setup the pylibftdi device.
