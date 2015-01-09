@@ -53,37 +53,45 @@ class module(object):
 		Note: Some parameters are mandatory to connect to a physical device!
 		"""
 		cfg=dict()
-		if params.has_key('vid'):
-			if type(params['vid'])==type('a'):
-				params['vid']=int(params['vid'],base=16)
-				self.devcfg['vid']=params['vid']
-			if pylibftdi.USB_VID_LIST.count(params['vid'])==0:
-				pylibftdi.USB_VID_LIST.append(params['vid'])
-		if params.has_key('pid'):
-			if type(params['pid'])==type('a'):
-				params['pid']=int(params['pid'],base=16)
-				self.devcfg['pid']=params['pid']
-			if pylibftdi.USB_PID_LIST.count(params['pid'])==0:
-				pylibftdi.USB_PID_LIST.append(params['pid'])
-		if params.has_key('serial'):
-			if params['serial']!='':
-				cfg['device_id']=params['serial']
-		if params.has_key('channel'):
-			cfg['interface_select']=params['channel']
-		if params.has_key('mode'):
-			mode=params['mode']
-			if str(mode).lower()[0]=='t':
-				cfg['mode']=params['mode']='t'
-			else:
-				cfg['mode']=params['mode']='b'
-		if params.has_key('encoding'):
-			cfg['encoding']=params['encoding']
-		if params.has_key('index'):
-			index=int(params['index'])
-			if index>0:
-				cfg['device_index']=index
-		if params.has_key('interface'):
-			cfg['interface_select']=int(params['interface'])
+		try:
+			if params.has_key('vid'):
+				if type(params['vid'])==type('a'):
+					params['vid']=int(params['vid'],base=16)
+					self.devcfg['vid']=params['vid']
+				if pylibftdi.USB_VID_LIST.count(params['vid'])==0:
+					pylibftdi.USB_VID_LIST.append(params['vid'])
+			if params.has_key('pid'):
+				if type(params['pid'])==type('a'):
+					params['pid']=int(params['pid'],base=16)
+					self.devcfg['pid']=params['pid']
+				if pylibftdi.USB_PID_LIST.count(params['pid'])==0:
+					pylibftdi.USB_PID_LIST.append(params['pid'])
+			if params.has_key('serial'):
+				if params['serial']!='':
+					cfg['device_id']=params['serial']
+			if params.has_key('channel'):
+				cfg['interface_select']=params['channel']
+			if params.has_key('mode'):
+				mode=params['mode']
+				if str(mode).lower()[0]=='t':
+					cfg['mode']=params['mode']='t'
+				else:
+					cfg['mode']=params['mode']='b'
+			if params.has_key('encoding'):
+				cfg['encoding']=params['encoding']
+			if params.has_key('index'):
+				index=int(params['index'])
+				if index>0:
+					cfg['device_index']=index
+			if params.has_key('interface'):
+				cfg['interface_select']=int(params['interface'])
+		except:
+			self.iCeDeROM.modules['log'].log.exception('Invalid FTDI UART configuration!')
+			if self.iCeDeROM.modules.has_key('gui'):
+				self.iCeDeROM.modules['gui'].dialogs['message'].critical(
+					params['iCeDeROM'].modules['gui'].window,
+					'FTDI UART Interface', 'Invalid FTDI UART Interface confguration!')			
+			return False
 		#Connect to the device
 		try:
 			self.device=pylibftdi.Device(**cfg)

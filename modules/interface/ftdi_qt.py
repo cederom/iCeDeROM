@@ -180,14 +180,18 @@ class module(QtGui.QWidget):
 		
 	def configRead(self, **params):
 		'''Read widget values into variables and return as dictionary.'''
-		self.devcfg['vid']=str(self.buttons['vid'].text())
-		self.devcfg['pid']=str(self.buttons['pid'].text())
-		self.devcfg['mode']=str(self.buttons['mode'].currentText().toAscii().toLower())
-		self.devcfg['serial']=str(self.buttons['serial'].text())
-		self.devcfg['encoding']=str(self.buttons['encoding'].currentText().toAscii())
-		self.devcfg['index']=self.buttons['index'].value()
-		self.devcfg['baudrate']=int(self.buttons['baudrate'].currentText().toAscii())
-		self.devcfg['channel']=int(self.buttons['channel'].currentText().toAscii())
+		try:
+			self.devcfg['vid']=str(self.buttons['vid'].text())
+			self.devcfg['pid']=str(self.buttons['pid'].text())
+			self.devcfg['mode']=str(self.buttons['mode'].currentText().toAscii().toLower())
+			self.devcfg['serial']=str(self.buttons['serial'].text())
+			self.devcfg['encoding']=str(self.buttons['encoding'].currentText().toAscii())
+			self.devcfg['index']=self.buttons['index'].value()
+			self.devcfg['baudrate']=int(self.buttons['baudrate'].currentText().toAscii())
+			self.devcfg['channel']=int(self.buttons['channel'].currentText().toAscii())
+		except:
+			self.iCeDeROM.modules['log'].log.exception('Configuration read failed!')
+			return False
 		return self.devcfg
 
 	def configApply(self, **params):
