@@ -9,7 +9,6 @@
 #TODO: add file and script execution routine
 
 import code
-import python_qt
 
 class module(object):
 	"""
@@ -20,34 +19,29 @@ class module(object):
 		self.name='python'
 		if not params.has_key('iCeDeROM'):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		self.iCeDeROM=params['iCeDeROM']		
+		self.iCeDeROM=params['iCeDeROM']
+		self.ui=dict()
 		self.python=code.InteractiveConsole(params)
 		#Create GUI part if possible
-		if not self.iCeDeROM.modules.has_key('gui'): return
-		self.pythonQt=python_qt.module(**params)
-		code.sys.stdout=self.pythonQt
-		self.pythonQt.execute=self.python.push
-		self.python.write=self.pythonQt.write
-		self.pythonQt.write('Python ('+code.sys.platform+') '+code.sys.version+'\n')
+		if self.iCeDeROM.ui=='qt':
+			import python_qt
+			self.ui['qt']=python_qt.module(**params)
+			code.sys.stdout=self.ui['qt']
+			self.ui['qt'].execute=self.python.push
+			self.python.write=self.ui['qt'].write
+			self.ui['qt'].write('Python ('+code.sys.platform+') '+code.sys.version+'\n')
 
 	def setup(self, **params):
-		return
+		if self.iCeDeROM.ui=='qt':
+			self.ui['qt'].setup(**params)
 	
 	def start(self, **params):
-		if not self.iCeDeROM.modules.has_key('gui'): return
-		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(False)
-		self.pythonQt.tabs[self.name]=self.iCeDeROM.modules['gui'].tabs['system'].addTab(
-			self.pythonQt, 'python')
-		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
-		self.pythonQt.show()
+		if self.iCeDeROM.ui=='qt':
+			self.ui['qt'].start(**params)
 
-	
 	def stop(self, **params):
-		if not self.iCeDeROM.modules.has_key('gui'): return
-		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(False)
-		self.iCeDeROM.modules['gui'].tabs['system'].removeTab(self.tabs[self.name])
-		self.texts[self.name].hide()
-		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
+		if self.iCeDeROM.ui=='qt':
+			self.ui['qt'].stop(**params)
 
 	def execute(self, command):
 		self.python.resetbuffer()
