@@ -6,7 +6,7 @@
 # (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-import sys
+import sys,os
 import git
 
 class iCeDeROM(object):
@@ -19,6 +19,7 @@ class iCeDeROM(object):
 		"""
 		#Modules related stuff
 		self.modules=dict()
+		self.path=os.path.dirname(__file__)
 		#Setup LOG module (mandatory)
 		import modules.log.log
 		module=modules.log.log.module(iCeDeROM=self)

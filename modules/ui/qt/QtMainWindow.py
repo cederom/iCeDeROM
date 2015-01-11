@@ -106,6 +106,7 @@ class module(object):
 
 	def createDialogs(self, **params):
 		self.dialogs['message']=QtGui.QMessageBox(self.window)
+		self.dialogs['file']=QtGui.QFileDialog(self.window)
 
 	def createMenus(self, **params):
 		self.menu=self.window.menuBar()

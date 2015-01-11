@@ -20,8 +20,14 @@ class module(object):
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']
 		self.ui=dict()		
+		self.logFile=False
+		self.logFileEnabled=False
+		self.logFile=None
+		self.logFileName=self.iCeDeROM.path
+		self.logFileName+='/'+'iCeDeROM-Terminal-Dump.txt'
 		if self.iCeDeROM.ui=='qt':
 			import terminal_qt
+			params['parent']=self
 			self.ui['qt']=terminal_qt.module(**params)
 			self.ui['qt'].parent=self
 
@@ -39,6 +45,30 @@ class module(object):
 
 	def write(self, data):
 		self.iCeDeROM.modules['interface'].write(data)
-		
+		self.logFileWrite(data)
+
 	def read(self, length):
-		return self.iCeDeROM.modules['interface'].read(length)
+		chunk=self.iCeDeROM.modules['interface'].read(length)
+		if chunk!='': self.logFileWrite(chunk)
+		return chunk
+
+	def logFileStart(self, filename):
+		if self.logFileEnabled: self.logFileStop()
+		if filename!=self.logFileName: self.logFileName=filename
+		try:
+			self.logFile=open(self.logFileName,'w+b')
+		except:
+			self.iCeDeROM.modules['log'].log.exception('Cannot open log file for writing!')
+			if self.iCeDeROM.ui=='qt':
+				self.iCeDeROM.modules['gui'].dialogs['message'].warning(
+					self.iCeDeROM.modules['gui'].window,
+					'Terminal Log File', 'Cannot open log file for writing!')
+		self.logFileEnabled=True
+
+	def logFileStop(self):
+		self.logFile.flush()
+		self.logFile.close()
+		self.logFileEnabled=False
+
+	def logFileWrite(self,data):
+		if self.logFileEnabled: self.logFile.write(data)
