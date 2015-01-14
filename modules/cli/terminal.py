@@ -64,6 +64,7 @@ class module(object):
 					self.iCeDeROM.modules['gui'].window,
 					'Terminal Log File', 'Cannot open log file for writing!')
 		self.logFileEnabled=True
+		self.iCeDeROM.modules['log'].log.info('Terminal streams to: '+self.logFileName)
 
 	def logFileStop(self):
 		self.logFile.flush()

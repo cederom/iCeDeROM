@@ -33,7 +33,6 @@ class module(object):
 		self.groups=dict()
 		self.trees=dict()
 		self.buttons=dict()
-		self.logFileEnabled=False
 		self.logFileName=self.parent.logFileName
 		self.createQtWidget(**params)
 		self.setupQtWidget(**params)
@@ -90,6 +89,7 @@ class module(object):
 	def setupQtWidgetMdiWindow(self, **params):
 		self.windows[self.name].setWindowTitle('Terminal')
 		self.windows[self.name].setCentralWidget(self.texts[self.name])
+		self.windows[self.name].statusBar()
 		self.texts[self.name].setReadOnly(False)
 		self.texts[self.name].setFont(self.fonts[self.name])
 		self.texts[self.name].setAcceptRichText(False)		
@@ -117,7 +117,7 @@ class module(object):
 			['parameter','value','descrption']))
 		self.trees['config'].setColumnWidth(0,150)
 		self.trees['config'].setColumnWidth(1,100)
-		#DEVICE branch
+		#LogFile branch
 		self.trees['logfile']=QtGui.QTreeWidgetItem(self.trees['config'], ['LogFile'])
 		self.trees['logtofile']=QtGui.QTreeWidgetItem(self.trees['logfile'],
 			['Log To File','','Stream Terminal data to a local file.'])
@@ -131,9 +131,14 @@ class module(object):
 		self.trees['config'].setItemWidget(self.trees['logfilename'],1,self.buttons['logfilename'])
 		self.buttons['logfilename'].connect(
 			self.buttons['logfilename'],QtCore.SIGNAL('clicked()'),self.logFileSelect)
-		
+		#Display branch
+		self.trees['display']=QtGui.QTreeWidgetItem(self.trees['config'],['Display'])
+		self.trees['autoscroll']=QtGui.QTreeWidgetItem(self.trees['display'],
+			['Auto Scroll','','Scroll the window when new data arrives.'])
+		self.buttons['autoscroll']=QtGui.QCheckBox()
+		self.buttons['autoscroll'].setChecked(True)
+		self.trees['config'].setItemWidget(self.trees['autoscroll'],1,self.buttons['autoscroll'])
 		self.trees['config'].expandAll()
-
 
 	def logFileToggle(self):
 		if self.buttons['logtofile'].isChecked():
@@ -143,10 +148,12 @@ class module(object):
 					'File Question', 'File already exist! Do you want to overwrite?',
 					QtGui.QMessageBox.Yes|QtGui.QMessageBox.No)
 				if res==QtGui.QMessageBox.Yes:
-					print 'WRITING\n'
 					self.parent.logFileStart(self.logFileName)
+					self.windows[self.name].statusBar().showMessage(
+						'Stream: '+self.logFileName)
 		else:
 			self.parent.logFileStop()
+			self.windows[self.name].statusBar().showMessage('')
 
 	def logFileSelect(self):
 		filename=self.iCeDeROM.modules['gui'].dialogs['file'].getSaveFileName(
@@ -178,7 +185,8 @@ class module(object):
 	def write(self, data):
 		if data=='': return
 		self.texts[self.name].insertPlainText(data)
-		self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
+		if self.buttons['autoscroll'].isChecked():
+			self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
 		
 	def test(self):
 		self.iCeDeROM.modules['gui'].dialogs['message'].information(self,'Terminal','This is a Terminal Menu Test...')
