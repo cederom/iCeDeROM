@@ -70,7 +70,8 @@ class module(object):
 		self.fonts[self.name]=QtGui.QFont('courier')
 
 	def createQtWidgetMenu(self, **params):
-		self.menu=QtGui.QMenu('Terminal')
+		self.menus[self.name]=QtGui.QMenu('Terminal')
+		self.menus['window']=QtGui.QMenu('Window')
 
 	def createQtWidgetConfigTab(self, **params):
 		self.tabs['config']=QtGui.QTabWidget()
@@ -99,8 +100,10 @@ class module(object):
 		self.texts[self.name].timerEvent=self.timerEvent
 		
 	def setupQtWidgetMenu(self, **params):
-		self.actions['source']=self.menu.addAction('Test',self.test)
-		self.iCeDeROM.modules['gui'].menus['modules'].addMenu(self.menu)
+		self.actions['window_show']=self.menus['window'].addAction('Show',self.windowShow)
+		self.actions['window_hide']=self.menus['window'].addAction('Hide',self.windowHide)
+		self.menus[self.name].addMenu(self.menus['window'])
+		self.iCeDeROM.modules['gui'].menus['modules'].addMenu(self.menus[self.name])
 
 	def setupQtWidgetConfigTab(self, **params):
 		self.layouts['terminal_config'].addWidget(self.groups['config'])
@@ -187,6 +190,9 @@ class module(object):
 		self.texts[self.name].insertPlainText(data)
 		if self.buttons['autoscroll'].isChecked():
 			self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
-		
-	def test(self):
-		self.iCeDeROM.modules['gui'].dialogs['message'].information(self,'Terminal','This is a Terminal Menu Test...')
+
+	def windowShow(self):
+		self.windows[self.name].show()
+
+	def windowHide(self):
+		self.windows[self.name].hide()
