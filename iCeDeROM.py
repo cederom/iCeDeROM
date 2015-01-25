@@ -40,7 +40,7 @@ class iCeDeROM(object):
 			module=modules.ui.qt.QtMainWindow.module(iCeDeROM=self, argv=sys.argv)
 			self.modules['log'].log.info('Loading '+module.name+' module...')
 			module.setup(iCeDeROM=self)
-			self.modules[module.name]=module
+			self.modules[module.name]=module			
 			#Load example mdiWindow module
 			import modules.ui.qt.QtMdiChildExample
 			module=modules.ui.qt.QtMdiChildExample.module(iCeDeROM=self)
@@ -55,6 +55,13 @@ class iCeDeROM(object):
 			module.setup(iCeDeROM=self)
 			module.start(iCeDeROM=self)
 			self.modules[module.name]=module
+		#Load the Memory Buffer module
+		import modules.memory.memory
+		module=modules.memory.memory.module(iCeDeROM=self)
+		self.modules['log'].log.info('Loading '+module.name+' module...')
+		module.setup(iCeDeROM=self)
+		module.start(iCeDeROM=self)
+		self.modules[module.name]=module
 		#Load Interface Drivers Module
 		import modules.interface.interface
 		module=modules.interface.interface.module(iCeDeROM=self)
