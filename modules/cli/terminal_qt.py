@@ -125,6 +125,7 @@ class module(object):
 		self.trees['logtofile']=QtGui.QTreeWidgetItem(self.trees['logfile'],
 			['Log To File','','Stream Terminal data to a local file.'])
 		self.buttons['logtofile']=QtGui.QCheckBox()
+		self.buttons['logtofile'].setTristate(False)
 		self.buttons['logtofile'].connect(
 			self.buttons['logtofile'],QtCore.SIGNAL('stateChanged(int)'),self.logFileToggle)
 		self.trees['config'].setItemWidget(self.trees['logtofile'],1,self.buttons['logtofile'])
@@ -141,6 +142,11 @@ class module(object):
 		self.buttons['autoscroll']=QtGui.QCheckBox()
 		self.buttons['autoscroll'].setChecked(True)
 		self.trees['config'].setItemWidget(self.trees['autoscroll'],1,self.buttons['autoscroll'])
+		self.trees['clear']=QtGui.QTreeWidgetItem(self.trees['display'],
+			['Clear','','Crear Terminal.'])
+		self.buttons['clear']=QtGui.QPushButton('Clear')
+		self.buttons['clear'].connect(self.buttons['clear'],QtCore.SIGNAL('clicked()'),self.clearTerminal)
+		self.trees['config'].setItemWidget(self.trees['clear'],1,self.buttons['clear'])
 		self.trees['config'].expandAll()
 
 	def logFileToggle(self):
@@ -150,10 +156,13 @@ class module(object):
 					self.iCeDeROM.modules['gui'].window,
 					'File Question', 'File already exist! Do you want to overwrite?',
 					QtGui.QMessageBox.Yes|QtGui.QMessageBox.No)
-				if res==QtGui.QMessageBox.Yes:
-					self.parent.logFileStart(self.logFileName)
-					self.windows[self.name].statusBar().showMessage(
-						'Stream: '+self.logFileName)
+				if res==QtGui.QMessageBox.No:
+					self.buttons['logtofile'].setChecked(False)
+					return
+			self.parent.logFileStart(self.logFileName)
+			self.parent.logFileWrite(str(self.texts[self.name].toPlainText()))
+			self.windows[self.name].statusBar().showMessage(
+				'Stream: '+self.logFileName)
 		else:
 			self.parent.logFileStop()
 			self.windows[self.name].statusBar().showMessage('')
@@ -190,6 +199,9 @@ class module(object):
 		self.texts[self.name].insertPlainText(data)
 		if self.buttons['autoscroll'].isChecked():
 			self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
+
+	def clearTerminal(self):
+		self.texts[self.name].setPlainText('')
 
 	def windowShow(self):
 		self.windows[self.name].show()

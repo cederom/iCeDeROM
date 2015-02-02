@@ -8,7 +8,7 @@
 # All rights reserved, so far :-)
 
 class module(object):
-	"""Example Module with Qt mdiChild window."""
+	"""Terminal Module with Qt mdiChild window."""
 	def __init__(self, **params):
 		"""
 		Create Module and QtWidget if necessary.
@@ -67,6 +67,7 @@ class module(object):
 		self.iCeDeROM.modules['log'].log.info('Terminal streams to: '+self.logFileName)
 
 	def logFileStop(self):
+		if not self.logFile: return
 		self.logFile.flush()
 		self.logFile.close()
 		self.logFileEnabled=False
