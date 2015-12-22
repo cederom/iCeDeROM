@@ -1,66 +1,59 @@
-<h1>iCeDeROM</h1>
+# iCeDeROM
 
-(= In-Circuit Evaluate Debug and Edit for Research on Microelectronics =)
+**In-Circuit Evaluate Debug and Edit for Research on Microelectronics**
 
-<h2>About</h2>
+http://www.icederom.com
+
+# About
 iCeDeROM - a Swiss Army Knife Multi-Tool for Digital Electronics - is a platform and hardware independent python-based low-level development and analysis software utility to work with microelectronic devices such as embedded and computer systems.
 
 iCeDeROM was started by Tomasz Bolesław CEDRO (http://www.tomek.cedro.info) in 2014 as an Open-Source project.
 
 
-<h2>Features</h2>
+# Features
 
-<h3>Available Features</h3>
-<ul>
-<li>Qt4 GUI: MDI (Multiple Document Interface) for modules windows, Panels for configuration, etc.</li>
-<li>Logging: loglevels, file output, QtWidget output.</li>
-<li>Python Console: buil-it python interpreter with access to all modules, QtWidget CLI.</li>
-<li>Interface: various hardware interface infrastructure, QtWidget configuration.</li>
-<li>Terminal: Serial Console Port terminal, QtWidget CLI.</li>
-</ul>
-
-<h3>Planned Features</h3>
-<ul>
-<li>Common iCeDeROM API.</li>
-<li>No GUI operaitons (i.e. shell only).</li>
-<li>Python scripts automation.</li>
-<li>Interface Bitbang.</li>
-<li>Transport Layer between Target Device and Interface Layer.</li>
-<li>Various Hardware Interfaces support.</li>
-<li>Memory buffer, chunk-based.</li>
-<li>Hex Editor.</li>
-<li>JTAG Support.</li>
-<li>SWD Support.</li>
-<li>MIPS CPU Support.</li>
-<li>ARM CPU Support.</li>
-<li>Intel CPU Support.</li>
-<li>Debugging.</li>
-<li>Memory Analysis.</li>
-</ul>
-
-<h2>Requirements, Dependencies, Hardware</h2>
-
-<h3> Software Dependencies</h3>
-<ul>
-<li>Python 2.7</li>
-<li>PyQt4</li>
-<li>GitPython (download with pip)</li>
-<li>pyLibFTDI (download with pip)
-</ul>
-
-<h3>Supported Hardware</h3>
-<ul>
-<li>FTDI USB Dongles - using LibFTDI wrapper</li>
-<ul>
-<li>Serial Console Port</li>
-<li>Manual and Preset Configuration (presets available for
-<a href="http://shop.kristech.pl/p/24/257/kt-link-.html" target="_blank">KT-LINK</a>
-)
-</ul>
-</ul>
+## Available Features
+* Qt4 GUI: MDI (Multiple Document Interface) for modules windows, Panels for configuration, etc.
+* Logging: loglevels, file output, QtWidget output.
+* Python Console: buil-it python interpreter with access to all modules, QtWidget CLI.
+* Interface: various hardware interface infrastructure, QtWidget configuration.
+* Terminal: Serial Console Port terminal, QtWidget CLI.
 
 
-<h2>Developer's Scratchpad</h2>
+## Planned Features
+
+* Common iCeDeROM API.
+* No GUI operaitons (i.e. shell only).
+* Python scripts automation.
+* Interface Bitbang.
+* Transport Layer between Target Device and Interface Layer.
+* Various Hardware Interfaces support.
+* Memory buffer, chunk-based.
+* Hex Editor.
+* JTAG Support.
+* SWD Support.
+* MIPS CPU Support.
+* ARM CPU Support.
+* Intel CPU Support.
+* Debugging.
+* Memory Analysis.
+
+
+# Requirements, Dependencies, Hardware
+
+## Software Dependencies
+* Python 2.7
+* PyQt4
+* GitPython (download with pip)
+* pyLibFTDI (download with pip)
+
+## Supported Hardware
+* FTDI USB Dongles - using LibFTDI wrapper
+* Serial Console Port
+ * Manual and Preset Configuration (presets available for <a href="http://shop.kristech.pl/p/24/257/kt-link-.html" target="_blank">KT-LINK</a>)
+
+
+## Developer's Scratchpad
 
 iCeDeROM is supposed to work as standalone application, but it should be also possible to include it as Python module into external application. As for now all efforts are put into core functionalities, API clarification and Qt4 GUI. In future standalone operations in console and/or scripted invocation should be possible..
 
@@ -266,5 +259,13 @@ class module(QtGui.QWidget):
 			self,'Terminal','This is a Terminal Menu Test...')
 ```
 
+# References
 
-<small>iCeDeROM (C) 2014-2015 Tomasz Bolesław CEDRO, All rights reserved :-)</small> <a href="http://www.icederom.com">http://www.iCeDeROM.com</a>
+## Articles and Publications
+ 1. Tomasz CEDRO, Marcin KUZIA, Antoni GRZANKA, ["LibSWD, Serial Wire Debug Open Framework for Low-Level Embedded Systems Access"](https://www.researchgate.net/publication/261079643_LibSWD_Serial_Wire_Debug_Open_Framework_for_Low-Level_Embedded_Systems_Access), Computer Science and Information Systems (FedCSIS), 2012 Federated Conference on, IEEE, 9-12 Sept. 2012, 615 - 620, E-ISBN 978-83-60810-51-4, Print ISBN 978-1-4673-0708-6. DOI: 10.13140/RG.2.1.1412.8722.
+ 2. Tomasz CEDRO, Marcin KUZIA, ["A Bits' Life"](https://www.researchgate.net/publication/269094704_A_Bits'_Life), Hakin9 Mobile Security, 2012/2, 34-40, 02/2012(3) ISSN: 1733-7186.
+ 3. Mordechai Guri, Yuri Poliak , Bracha Shapira, Yuval Elovici, ["JoKER: Trusted Detection of Kernel Rootkits in Android Devices via JTAG Interface"](http://arxiv.org/ftp/arxiv/papers/1512/1512.04116.pdf), Trustcom/BigDataSE/ISPA, 2015 IEEE  (Volume:1), 20-22 Aug. 2015, 65 - 73, INSPEC Accession Number: 15635781. DOI: 10.1109/Trustcom.2015.358.
+
+
+*iCeDeROM (C) 2014-2015 CeDeROM, Tomasz Bolesław CEDRO (http://www.tomek.cedro.info), All rights reserved! :-)*
+
