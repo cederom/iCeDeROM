@@ -7,6 +7,6 @@
 # All rights reserved, so far :-)
 
 __all__ = [
-'interface',
-'ftdi'
+    'interface',
+    'ftdi'
 ]

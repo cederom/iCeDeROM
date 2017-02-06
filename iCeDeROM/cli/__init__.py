@@ -7,8 +7,8 @@
 # All rights reserved, so far :-)
 
 __all__ = [
-'python',
-'python_qt',
-'terminal',
-'terminal_qt'
+    'python',
+    'python_qt',
+    'terminal',
+    'terminal_qt'
 ]

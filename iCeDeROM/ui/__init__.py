@@ -7,5 +7,5 @@
 # All rights reserved, so far :-)
 
 __all__ = [
-'qt'
+    'qt'
 ]
