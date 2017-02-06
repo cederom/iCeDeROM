@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'memory_qt' (provides QtWidget for Memory iCeDeROM Module.
-# (C) 2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-from PyQt4 import QtCore,QtGui
+from PyQt5 import QtCore,QtWidgets
 
 class module(object):
 	"""
@@ -16,12 +16,12 @@ class module(object):
 	def __init__(self, **params):
 		"""Create Qt Widget for Memory module."""
 		self.name='memory_qt'		
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if not params['iCeDeROM'].modules.has_key('gui'):
+		if not 'gui' in params['iCeDeROM'].modules:
 			raise RuntimeError('Memory QtWidget requires GUI running!')
 		self.iCeDeROM=params['iCeDeROM']
-		self.parent=params['parent'] if params.has_key('parent') else None
+		self.parent=params['parent'] if 'parent' in params else None
 		self.windows=dict()
 		self.window=None
 		self.tables=dict()
@@ -70,15 +70,15 @@ class module(object):
 		self.createQtWidgetConfigTab(**params)
 
 	def createQtWidgetMdiWindow(self, **params):
-		self.window=self.windows[self.name]=QtGui.QMainWindow()
-		self.tables[self.name]=QtGui.QTableWidget(self.windows[self.name])
+		self.window=self.windows[self.name]=QtWidgets.QMainWindow()
+		self.tables[self.name]=QtWidgets.QTableWidget(self.windows[self.name])
 
 	def createQtWidgetConfigTab(self, **params):
-		self.tabs['config']=QtGui.QTabWidget()
-		self.layouts['memory_config']=QtGui.QVBoxLayout(self.tabs['config'])
-		self.groups['config']=QtGui.QGroupBox('Memory Configuration')
-		self.layouts['config']=QtGui.QVBoxLayout(self.groups['config'])
-		self.trees['config']=QtGui.QTreeWidget()
+		self.tabs['config']=QtWidgets.QTabWidget()
+		self.layouts['memory_config']=QtWidgets.QVBoxLayout(self.tabs['config'])
+		self.groups['config']=QtWidgets.QGroupBox('Memory Configuration')
+		self.layouts['config']=QtWidgets.QVBoxLayout(self.groups['config'])
+		self.trees['config']=QtWidgets.QTreeWidget()
 
 	def setupQtWidget(self, **params):
 		if self.iCeDeROM.ui!='qt':
@@ -100,43 +100,47 @@ class module(object):
 		self.layouts['config'].setContentsMargins(0,0,0,0)		
 		self.layouts['config'].setSpacing(0)
 		self.trees['config'].setMinimumHeight(100)
-		self.trees['config'].setSizePolicy(QtGui.QSizePolicy(
-			QtGui.QSizePolicy.Minimum,
-			QtGui.QSizePolicy.Minimum))
+		self.trees['config'].setSizePolicy(QtWidgets.QSizePolicy(
+			QtWidgets.QSizePolicy.Minimum,
+			QtWidgets.QSizePolicy.Minimum))
 		#Populate the TreeWidget
-		self.trees['config'].setHeaderItem(QtGui.QTreeWidgetItem(
+		self.trees['config'].setHeaderItem(QtWidgets.QTreeWidgetItem(
 			['parameter','value','descrption']))
 		self.trees['config'].setColumnWidth(0,150)
 		self.trees['config'].setColumnWidth(1,100)
 		#File branch
-		self.trees['file']=QtGui.QTreeWidgetItem(self.trees['config'], ['File'])
-		self.trees['filename']=QtGui.QTreeWidgetItem(self.trees['file'],
+		self.trees['file']=QtWidgets.QTreeWidgetItem(self.trees['config'], ['File'])
+		self.trees['filename']=QtWidgets.QTreeWidgetItem(self.trees['file'],
 			['Filename','',str(self.parent.filename)])
-		self.buttons['filename']=QtGui.QPushButton('Select')
+		self.buttons['filename']=QtWidgets.QPushButton('Select')
 		self.trees['config'].setItemWidget(self.trees['filename'],1,self.buttons['filename'])
-		self.buttons['filename'].connect(
-			self.buttons['filename'],QtCore.SIGNAL('clicked()'),self.fileSelect)
+		#TODO: FIX SINGALLING CODE
+		# self.buttons['filename'].connect(
+		#	self.buttons['filename'],QtCore.SIGNAL('clicked()'),self.fileSelect)
 
-		self.trees['fileNew']=QtGui.QTreeWidgetItem(self.trees['file'],
+		self.trees['fileNew']=QtWidgets.QTreeWidgetItem(self.trees['file'],
 			['Create','','Create new file with selected name.'])
-		self.buttons['fileNew']=QtGui.QPushButton('New')
+		self.buttons['fileNew']=QtWidgets.QPushButton('New')
 		self.trees['config'].setItemWidget(self.trees['fileNew'],1,self.buttons['fileNew'])
-		self.buttons['fileNew'].connect(
-			self.buttons['fileNew'],QtCore.SIGNAL('clicked()'),self.fileNew)
+		#TODO: FIX SIGNALLING CODE
+		# self.buttons['fileNew'].connect(
+		#	self.buttons['fileNew'],QtCore.SIGNAL('clicked()'),self.fileNew)
 
-		self.trees['fileLoad']=QtGui.QTreeWidgetItem(self.trees['file'],
+		self.trees['fileLoad']=QtWidgets.QTreeWidgetItem(self.trees['file'],
 			['Load','','Load selected file.'])
-		self.buttons['fileLoad']=QtGui.QPushButton('Load')
+		self.buttons['fileLoad']=QtWidgets.QPushButton('Load')
 		self.trees['config'].setItemWidget(self.trees['fileLoad'],1,self.buttons['fileLoad'])
-		self.buttons['fileLoad'].connect(
-			self.buttons['fileLoad'],QtCore.SIGNAL('clicked()'),self.fileOpen)
+		#TODO: FIX SIGNALLING CODE
+		# self.buttons['fileLoad'].connect(
+		#	self.buttons['fileLoad'],QtCore.SIGNAL('clicked()'),self.fileOpen)
 
-		self.trees['fileSave']=QtGui.QTreeWidgetItem(self.trees['file'],
+		self.trees['fileSave']=QtWidgets.QTreeWidgetItem(self.trees['file'],
 			['Save','','Save selected file.'])
-		self.buttons['fileSave']=QtGui.QPushButton('Save')
+		self.buttons['fileSave']=QtWidgets.QPushButton('Save')
 		self.trees['config'].setItemWidget(self.trees['fileSave'],1,self.buttons['fileSave'])
-		self.buttons['fileSave'].connect(
-			self.buttons['fileSave'],QtCore.SIGNAL('clicked()'),self.fileSave)
+		#TODO: FIX SIGNALLING CODE
+		# self.buttons['fileSave'].connect(
+		#	self.buttons['fileSave'],QtCore.SIGNAL('clicked()'),self.fileSave)
 
 		self.trees['config'].expandAll()
 
@@ -152,12 +156,15 @@ class module(object):
 		self.window.setMinimumSize(self.windowContentWidthSingle,100)
 		self.tables[self.name].setColumnCount(self.hexColumnCount*self.hexColumnMultiply+2)
 		tableLabel=['ADDRESS']
-		for i in range(0,self.hexColumnCount*self.hexColumnMultiply): tableLabel.append("%02X"%i)
+		#TODO: FIX FORMATTING PROBLEM
+		# for i in range(0,self.hexColumnCount*self.hexColumnMultiply): tableLabel.append("%02X"%i)
 		tableLabel.append('ASCII')
 		self.tables[self.name].setHorizontalHeaderLabels(tableLabel)
-		self.tables[self.name].horizontalHeader().setResizeMode(QtGui.QHeaderView.Fixed)
-		for i in range(1,self.hexColumnCount*self.hexColumnMultiply+1):
-			self.tables[self.name].setColumnWidth(i,self.hexColumnWidth)
+		#TODO: FIX COMPONENT PROBLEM
+		# self.tables[self.name].horizontalHeader().setResizeMode(QtWidgets.QHeaderView.Fixed)
+		#TODO: FIX FORMATTING PROBLEM
+		# for i in range(1,self.hexColumnCount*self.hexColumnMultiply+1):
+		#	self.tables[self.name].setColumnWidth(i,self.hexColumnWidth)
 		self.tables[self.name].setColumnWidth(0,self.addrColumnWidth)
 		self.tables[self.name].setColumnWidth(self.hexColumnCount*self.hexColumnMultiply+1,self.asciiColumnWidth)
 		self.tables[self.name].setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -180,7 +187,7 @@ class module(object):
 		rows=self.parent.size/(self.parent.chunksize/cols)
 		if rows==0: rows=1
 		chunk=0
-		print 'ROWS: '+str(rows)
+		print('ROWS: '+str(rows))
 		self.tables[self.name].setRowCount(rows)
 		self.parent.chunkdata=self.parent.buffer.read(self.parent.chunksize)
 		while self.parent.chunkdata:
@@ -188,7 +195,7 @@ class module(object):
 				for row in range(0,rows):
 					byte=self.parent.chunkdata[column+row]
 					self.tables[self.name].setCurrentCell((chunk*rows)+row,column)
-					self.tables[self.name].setCurrentItem(QtGui.QTableWidgetItem("%02X"%byte))
+					self.tables[self.name].setCurrentItem(QtWidgets.QTableWidgetItem("%02X"%byte))
 			self.parent.chunkdata=self.parent.buffer.read(self.parent.chunksize)
 					
 

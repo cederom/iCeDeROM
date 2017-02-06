@@ -1,14 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'gui' (Qt4 based Main Window and GUI Core).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import sys,io
-from PyQt4 import Qt,QtCore,QtGui
+from PyQt5 import Qt,QtCore,QtWidgets
 
 class module(object):
 	"""Main Application Window for QT UI."""
@@ -22,11 +22,11 @@ class module(object):
 		You can override QtStyle with '-style' commandline option.
 		"""
 		self.name='gui'
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']		
-		QtGui.QApplication.setStyle('cleanlooks')
-		self.app=QtGui.QApplication(params['argv'])
+		QtWidgets.QApplication.setStyle('cleanlooks')
+		self.app=QtWidgets.QApplication(params['argv'])
 		self.docks=dict()
 		self.tabs=dict()
 		self.dialogs=dict()
@@ -51,14 +51,14 @@ class module(object):
 		self.setupDocks(**params)
 
 	def createMainWindow(self, **params):
-		self.window=QtGui.QMainWindow()
-		self.mdi=QtGui.QMdiArea(self.window)
-		self.statusbar=QtGui.QStatusBar(self.window)
-		self.labels['filenameL']=QtGui.QLabel(self.window)
-		self.labels['filename']=QtGui.QLabel(self.window)
-		self.labels['interfaceL']=QtGui.QLabel(self.window)
-		self.labels['interface']=QtGui.QLabel(self.window)
-		self.labels['progress']=QtGui.QProgressBar(self.window)
+		self.window=QtWidgets.QMainWindow()
+		self.mdi=QtWidgets.QMdiArea(self.window)
+		self.statusbar=QtWidgets.QStatusBar(self.window)
+		self.labels['filenameL']=QtWidgets.QLabel(self.window)
+		self.labels['filename']=QtWidgets.QLabel(self.window)
+		self.labels['interfaceL']=QtWidgets.QLabel(self.window)
+		self.labels['interface']=QtWidgets.QLabel(self.window)
+		self.labels['progress']=QtWidgets.QProgressBar(self.window)
 
 	def setupMainWindow(self, **params):
 		#Main Window
@@ -71,10 +71,10 @@ class module(object):
 		self.window.setStatusBar(self.statusbar)
 		self.labels['filenameL'].setText('F:')
 		#TODO make filename label elice/truncate long strings and not impact window size
-		self.labels['filename'].setFrameStyle(QtGui.QFrame.StyledPanel|QtGui.QFrame.Sunken)
+		self.labels['filename'].setFrameStyle(QtWidgets.QFrame.StyledPanel|QtWidgets.QFrame.Sunken)
 		self.labels['filename'].setText('None')
 		self.labels['interfaceL'].setText('IF:')
-		self.labels['interface'].setFrameStyle(QtGui.QFrame.StyledPanel|QtGui.QFrame.Sunken)
+		self.labels['interface'].setFrameStyle(QtWidgets.QFrame.StyledPanel|QtWidgets.QFrame.Sunken)
 		self.labels['interface'].setWordWrap(False)
 		self.labels['interface'].setText('None')
 		self.labels['progress'].setTextVisible(False)
@@ -88,13 +88,13 @@ class module(object):
 
 	def createDocks(self, **params):
 		#System Dock and its contents
-		self.tabs['system']=QtGui.QTabWidget()
-		self.docks['system']=QtGui.QDockWidget()
+		self.tabs['system']=QtWidgets.QTabWidget()
+		self.docks['system']=QtWidgets.QDockWidget()
 		self.docks['system'].setWindowTitle('System')
 		self.docks['system'].setMinimumSize(250,50)
 		self.docks['system'].setFeatures(
-			QtGui.QDockWidget.DockWidgetVerticalTitleBar|
-			QtGui.QDockWidget.AllDockWidgetFeatures)
+			QtWidgets.QDockWidget.DockWidgetVerticalTitleBar|
+			QtWidgets.QDockWidget.AllDockWidgetFeatures)
 		self.docks['system'].setWidget(self.tabs['system'])
 		self.window.addDockWidget(QtCore.Qt.BottomDockWidgetArea, self.docks['system'])
 		self.tabs['system'].addTab(
@@ -105,8 +105,8 @@ class module(object):
 		return
 
 	def createDialogs(self, **params):
-		self.dialogs['message']=QtGui.QMessageBox(self.window)
-		self.dialogs['file']=QtGui.QFileDialog(self.window)
+		self.dialogs['message']=QtWidgets.QMessageBox(self.window)
+		self.dialogs['file']=QtWidgets.QFileDialog(self.window)
 
 	def createMenus(self, **params):
 		self.menu=self.window.menuBar()
@@ -125,10 +125,10 @@ class module(object):
 		self.menus['help'].addAction('About Qt',self.aboutQt)
 
 	def setMdiTabbed(self):
-		self.mdi.setViewMode(QtGui.QMdiArea.TabbedView)
+		self.mdi.setViewMode(QtWidgets.QMdiArea.TabbedView)
 		
 	def setMdiWindowed(self):
-		self.mdi.setViewMode(QtGui.QMdiArea.SubWindowView)
+		self.mdi.setViewMode(QtWidgets.QMdiArea.SubWindowView)
 
 	def setMdiCascaded(self):
 		self.mdi.cascadeSubWindows()

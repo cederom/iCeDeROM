@@ -1,15 +1,15 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'log' (provides logging capabilities).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import logging
 import sys, io
-from PyQt4 import QtCore,QtGui
+from PyQt5 import QtCore, QtWidgets
 
 
 default_filename='iCeDeROM.log'
@@ -25,7 +25,7 @@ class module(object):
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='log'
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']		
 		self.texts=dict()
@@ -49,9 +49,9 @@ class module(object):
 			level    is the default loglevel.
 		If parameter is not provided a default value is used.
 		"""
-		self.filename=params['filename'] if params.has_key('filename') else default_filename
-		self.level=params['level'] if params.has_key('level') else default_level
-		self.format=params['format'] if params.has_key('format') else default_format
+		self.filename=params['filename'] if 'filename' in params else default_filename
+		self.level=params['level'] if 'level' in params else default_level
+		self.format=params['format'] if 'format' in params else default_format
 		self.setupFormatter(self.format)
 		self.setupStreamHandler(self.level)
 		self.setupFileHandler(self.filename, self.level)
@@ -103,14 +103,15 @@ class module(object):
 		self.file.setLevel(level)
 
 	def createQtWidget(self, **params):		
-		self.texts[self.name]=QtGui.QTextEdit()
+		self.texts[self.name]=QtWidgets.QTextEdit()
 		self.texts[self.name].setAcceptRichText(False)
 		self.texts[self.name].setReadOnly(True)
 		self.texts[self.name].setFontFamily("Courier")
 		self.texts[self.name].show()
 		self.logfswatcher=QtCore.QFileSystemWatcher([self.filename])
-		self.logfswatcher.connect(self.logfswatcher, QtCore.SIGNAL('fileChanged(QString)'),self.logFileWatcher)
-		self.logfp=io.open(self.filename,'rt')
+		#TODO: FIX SIGNALS CODE
+		#self.logfswatcher.connect(self.logfswatcher, QtCore.SIGNAL('fileChanged(QString)'),self.logFileWatcher)
+		#self.logfp=io.open(self.filename,'rt')
 		return self.texts[self.name]
 
 	@QtCore.pyqtSlot(str)

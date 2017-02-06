@@ -1,14 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'QtMdiChildExample' (example of iCeDeROM Module with mdiChildWindow QtWidget).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import os
-from PyQt4 import Qt,QtCore,QtGui,uic
+from PyQt5 import Qt,QtCore,QtWidgets,uic
 
 uifilename='QtMdiChildExample.ui'
 
@@ -21,7 +21,7 @@ class module(object):
 			iCeDeROM module reference (mandatory).
 		"""
 		self.name='QtMdiChildExampleModule'		
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if params['iCeDeROM'].ui!='qt':
 			raise RuntimeError('Interface QtWidget requires Qt GUI running!')
@@ -40,7 +40,7 @@ class module(object):
 		self.ui['qt'].stop(**params)
 
 
-class QtWidget(QtGui.QMainWindow):
+class QtWidget(QtWidgets.QMainWindow):
 	"""Example Module, Qt mdiChildWindow."""
 	def __init__(self, **params):
 		"""
@@ -49,7 +49,7 @@ class QtWidget(QtGui.QMainWindow):
 			iCeDeROM module reference (mandatory).
 		"""
 		self.name='QtMdiChildExampleWindow'
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']
 		super(QtWidget, self).__init__()
@@ -61,8 +61,9 @@ class QtWidget(QtGui.QMainWindow):
 			self.iCeDeROM.modules['log'].log.critical('Cannot addSubWindow!')
 			raise
 		self.window.setWindowTitle('QtMdiChildExample')
-		self.window.connect(self.window.pushButton, QtCore.SIGNAL('clicked()'), lambda:self.listModules(**params))
-		self.window.connect(self.window.pushButton_2, QtCore.SIGNAL('clicked()'), lambda:self.logMessage(**params))
+		#TODO: FIX SIGNALS CODE
+		# self.window.connect(self.window.pushButton, QtCore.SIGNAL('clicked()'), lambda:self.listModules(**params))
+		# self.window.connect(self.window.pushButton_2, QtCore.SIGNAL('clicked()'), lambda:self.logMessage(**params))
 	def setup(self, **params):
 		return
 	def start(self, **params):

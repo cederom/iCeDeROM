@@ -21,7 +21,7 @@ class module(object):
 			iCeDeROM module reference (mandatory).
 		"""
 		self.name='memory'		
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']
 		self.buffer=None
@@ -31,7 +31,7 @@ class module(object):
 		self.size=0
 		self.ui=dict()
 		if self.iCeDeROM.ui=='qt':
-			import memory_qt
+			from iCeDeROM.memory import memory_qt
 			params['parent']=self
 			self.ui['qt']=memory_qt.module(**params)
 		self.fileOpen(self.iCeDeROM.path+'/'+default_filename)

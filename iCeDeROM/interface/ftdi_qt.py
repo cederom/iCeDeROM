@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'ftdi.uart_qt' (provides Qt GUI for ftdi.uart configuration).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 from PyQt4 import QtCore,QtGui

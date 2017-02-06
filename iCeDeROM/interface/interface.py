@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'interface' (provides physical/electrical interface driver comms).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 devices = ['modules.interface.ftdi']
@@ -23,7 +23,7 @@ class module(object):
 			iCeDeROM is the reference to the iCeDeROM object.
 		"""
 		self.name='interface'
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']
 		self.devices=dict()
@@ -32,7 +32,7 @@ class module(object):
 		self.ui=dict()
 		#Try to run GUI if possible
 		if self.iCeDeROM.ui=='qt':
-			import interface_qt
+			from iCeDeROM.interface import interface_qt
 			self.ui['qt']=interface_qt.module(**params)
 
 	def setup(self, **params):
@@ -61,7 +61,7 @@ class module(object):
 		"""
 		self.iCeDeROM.modules['log'].log.info(
 			'Loaded interface devices: '+str(self.devices.keys()))
-		if self.ui.has_key('qt'):
+		if 'qt' in self.ui:
 			for dev in self.devices:
 				self.ui['qt'].addDevice(name=dev)
 		return self.devices
@@ -90,7 +90,7 @@ class module(object):
 		"""Load all interface devices according to module list defines."""
 		for dev in devices:
 			self.load(name=dev)
-		
+
 	def setDefault(self, **params):
 		"""
 		Select the default device for iCeDeROM_Interface Module.

@@ -1,10 +1,10 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'Terminal' (terminal module for shell and/or serial port).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 class module(object):
@@ -16,7 +16,7 @@ class module(object):
 			iCeDeROM module reference (mandatory).
 		"""
 		self.name='terminal'		
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		self.iCeDeROM=params['iCeDeROM']
 		self.ui=dict()		
@@ -26,7 +26,7 @@ class module(object):
 		self.logFileName=self.iCeDeROM.path
 		self.logFileName+='/'+'iCeDeROM-Terminal-Dump.txt'
 		if self.iCeDeROM.ui=='qt':
-			import terminal_qt
+			from iCeDeROM.cli import terminal_qt
 			params['parent']=self
 			self.ui['qt']=terminal_qt.module(**params)
 			self.ui['qt'].parent=self

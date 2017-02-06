@@ -1,22 +1,22 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'drv_qt' (provides Qt GUI for iCeDeROM_Driver).
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-from PyQt4 import QtCore,QtGui
+from PyQt5 import QtCore,QtWidgets
 
-class module(QtGui.QTabWidget):
+class module(QtWidgets.QTabWidget):
 	"""
 	Provides basic Qt GUI for iCeDeROM_Driver.
 	"""
 	def __init__(self, **params):
 		"""Creates QtWidget."""
 		self.name='interface_qt'		
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
 		if params['iCeDeROM'].ui!='qt':
 			raise RuntimeError('Interface QtWidget requires Qt GUI running!')
@@ -50,20 +50,21 @@ class module(QtGui.QTabWidget):
 		self.iCeDeROM.modules['gui'].tabs['system'].setUpdatesEnabled(True)
 
 	def createQtWidget(self, **params):
-		self.layouts['interface']=QtGui.QHBoxLayout(self)
-		self.groups['device']=QtGui.QGroupBox('Device')
-		self.layouts['device']=QtGui.QVBoxLayout(self.groups['device'])
-		self.lists['device']=QtGui.QListWidget()
-		self.buttons['default']=QtGui.QPushButton('Set Defatult Interface')
-		self.groups['config']=QtGui.QGroupBox('Configuration')
-		self.layouts['config']=QtGui.QHBoxLayout(self.groups['config'])
-		self.stacks['config']=QtGui.QStackedWidget()
+		self.layouts['interface']=QtWidgets.QHBoxLayout(self)
+		self.groups['device']=QtWidgets.QGroupBox('Device')
+		self.layouts['device']=QtWidgets.QVBoxLayout(self.groups['device'])
+		self.lists['device']=QtWidgets.QListWidget()
+		self.buttons['default']=QtWidgets.QPushButton('Set Defatult Interface')
+		self.groups['config']=QtWidgets.QGroupBox('Configuration')
+		self.layouts['config']=QtWidgets.QHBoxLayout(self.groups['config'])
+		self.stacks['config']=QtWidgets.QStackedWidget()
 
 	def setupQtWidget(self, **params):
 		self.groups['device'].setFixedWidth(250)
 		self.layouts['interface'].addWidget(self.groups['device'])
-		self.connect(self.buttons['default'],
-			QtCore.SIGNAL('clicked()'), lambda:self.test(**params))
+		#TODO: FIX SIGNALLING CODE
+		# self.connect(self.buttons['default'],
+		#	QtCore.SIGNAL('clicked()'), lambda:self.test(**params))
 		self.layouts['device'].addWidget(self.lists['device'])
 		self.layouts['device'].addWidget(self.buttons['default'])
 		self.layouts['interface'].addWidget(self.groups['config'])

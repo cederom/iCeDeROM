@@ -1,14 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'terminal_qt' (provides QtWidget for modules.cli.terminal iCeDeROM Module.
-# (C) 2014-2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import os
-from PyQt4 import QtCore,QtGui
+from PyQt5 import QtCore,QtWidgets
 
 class module(object):
 	"""
@@ -17,12 +17,12 @@ class module(object):
 	def __init__(self, **params):
 		"""Create Qt Widget for Terminal CLI."""
 		self.name='terminal_qt'		
-		if not params.has_key('iCeDeROM'):
+		if not 'iCeDeROM' in params:
 			raise KeyError('iCeDeROM parameter reference mandatory!')
-		if not params['iCeDeROM'].modules.has_key('gui'):
+		if not 'gui' in params['iCeDeROM'].modules:
 			raise RuntimeError('Terminal QtWidget requires GUI running!')
 		self.iCeDeROM=params['iCeDeROM']
-		self.parent=params['parent'] if params.has_key('parent') else None
+		self.parent=params['parent'] if 'parent' in params else None
 		self.windows=dict()
 		self.texts=dict()
 		self.fonts=dict()
@@ -65,20 +65,21 @@ class module(object):
 		self.createQtWidgetConfigTab(**params)
 
 	def createQtWidgetMdiWindow(self, **params):
-		self.windows[self.name]=QtGui.QMainWindow()
-		self.texts[self.name]=QtGui.QTextEdit(self.windows[self.name])
-		self.fonts[self.name]=QtGui.QFont('courier')
+		self.windows[self.name]=QtWidgets.QMainWindow()
+		self.texts[self.name]=QtWidgets.QTextEdit(self.windows[self.name])
+		#TODO: FIX COMPONENT CODE
+		# self.fonts[self.name]=QtWidgets.QFont('courier')
 
 	def createQtWidgetMenu(self, **params):
-		self.menus[self.name]=QtGui.QMenu('Terminal')
-		self.menus['window']=QtGui.QMenu('Window')
+		self.menus[self.name]=QtWidgets.QMenu('Terminal')
+		self.menus['window']=QtWidgets.QMenu('Window')
 
 	def createQtWidgetConfigTab(self, **params):
-		self.tabs['config']=QtGui.QTabWidget()
-		self.layouts['terminal_config']=QtGui.QVBoxLayout(self.tabs['config'])
-		self.groups['config']=QtGui.QGroupBox('Terminal Configuration')
-		self.layouts['config']=QtGui.QVBoxLayout(self.groups['config'])
-		self.trees['config']=QtGui.QTreeWidget()
+		self.tabs['config']=QtWidgets.QTabWidget()
+		self.layouts['terminal_config']=QtWidgets.QVBoxLayout(self.tabs['config'])
+		self.groups['config']=QtWidgets.QGroupBox('Terminal Configuration')
+		self.layouts['config']=QtWidgets.QVBoxLayout(self.groups['config'])
+		self.trees['config']=QtWidgets.QTreeWidget()
 
 	def setupQtWidget(self, **params):
 		if self.iCeDeROM.ui!='qt':
@@ -92,7 +93,8 @@ class module(object):
 		self.windows[self.name].setCentralWidget(self.texts[self.name])
 		self.windows[self.name].statusBar()
 		self.texts[self.name].setReadOnly(False)
-		self.texts[self.name].setFont(self.fonts[self.name])
+		#TODO: FIX COMPONENT CODE / SEE ABOVE FONT INIT
+		# self.texts[self.name].setFont(self.fonts[self.name])
 		self.texts[self.name].setAcceptRichText(False)		
 		self.texts[self.name].keyPressEvent=self.keyPressEvent
 		self.texts[self.name].insertFromMimeData=self.insertFromMimeData
@@ -112,40 +114,43 @@ class module(object):
 		self.layouts['config'].setContentsMargins(0,0,0,0)		
 		self.layouts['config'].setSpacing(0)
 		self.trees['config'].setMinimumHeight(100)
-		self.trees['config'].setSizePolicy(QtGui.QSizePolicy(
-			QtGui.QSizePolicy.Minimum,
-			QtGui.QSizePolicy.Minimum))
+		self.trees['config'].setSizePolicy(QtWidgets.QSizePolicy(
+			QtWidgets.QSizePolicy.Minimum,
+			QtWidgets.QSizePolicy.Minimum))
 		#Populate the TreeWidget
-		self.trees['config'].setHeaderItem(QtGui.QTreeWidgetItem(
+		self.trees['config'].setHeaderItem(QtWidgets.QTreeWidgetItem(
 			['parameter','value','descrption']))
 		self.trees['config'].setColumnWidth(0,150)
 		self.trees['config'].setColumnWidth(1,100)
 		#LogFile branch
-		self.trees['logfile']=QtGui.QTreeWidgetItem(self.trees['config'], ['LogFile'])
-		self.trees['logtofile']=QtGui.QTreeWidgetItem(self.trees['logfile'],
+		self.trees['logfile']=QtWidgets.QTreeWidgetItem(self.trees['config'], ['LogFile'])
+		self.trees['logtofile']=QtWidgets.QTreeWidgetItem(self.trees['logfile'],
 			['Log To File','','Stream Terminal data to a local file.'])
-		self.buttons['logtofile']=QtGui.QCheckBox()
+		self.buttons['logtofile']=QtWidgets.QCheckBox()
 		self.buttons['logtofile'].setTristate(False)
-		self.buttons['logtofile'].connect(
-			self.buttons['logtofile'],QtCore.SIGNAL('stateChanged(int)'),self.logFileToggle)
+		#TODO: FIX SIGNALLING CODE
+		# self.buttons['logtofile'].connect(
+		#	self.buttons['logtofile'],QtCore.SIGNAL('stateChanged(int)'),self.logFileToggle)
 		self.trees['config'].setItemWidget(self.trees['logtofile'],1,self.buttons['logtofile'])
-		self.trees['logfilename']=QtGui.QTreeWidgetItem(self.trees['logfile'],
+		self.trees['logfilename']=QtWidgets.QTreeWidgetItem(self.trees['logfile'],
 			['Filename','',self.logFileName])
-		self.buttons['logfilename']=QtGui.QPushButton('Select')
+		self.buttons['logfilename']=QtWidgets.QPushButton('Select')
 		self.trees['config'].setItemWidget(self.trees['logfilename'],1,self.buttons['logfilename'])
-		self.buttons['logfilename'].connect(
-			self.buttons['logfilename'],QtCore.SIGNAL('clicked()'),self.logFileSelect)
+		#TODO: FIX SIGNALLING CODE
+		# self.buttons['logfilename'].connect(
+		#	self.buttons['logfilename'],QtCore.SIGNAL('clicked()'),self.logFileSelect)
 		#Display branch
-		self.trees['display']=QtGui.QTreeWidgetItem(self.trees['config'],['Display'])
-		self.trees['autoscroll']=QtGui.QTreeWidgetItem(self.trees['display'],
+		self.trees['display']=QtWidgets.QTreeWidgetItem(self.trees['config'],['Display'])
+		self.trees['autoscroll']=QtWidgets.QTreeWidgetItem(self.trees['display'],
 			['Auto Scroll','','Scroll the window when new data arrives.'])
-		self.buttons['autoscroll']=QtGui.QCheckBox()
+		self.buttons['autoscroll']=QtWidgets.QCheckBox()
 		self.buttons['autoscroll'].setChecked(True)
 		self.trees['config'].setItemWidget(self.trees['autoscroll'],1,self.buttons['autoscroll'])
-		self.trees['clear']=QtGui.QTreeWidgetItem(self.trees['display'],
+		self.trees['clear']=QtWidgets.QTreeWidgetItem(self.trees['display'],
 			['Clear','','Crear Terminal.'])
-		self.buttons['clear']=QtGui.QPushButton('Clear')
-		self.buttons['clear'].connect(self.buttons['clear'],QtCore.SIGNAL('clicked()'),self.clearTerminal)
+		self.buttons['clear']=QtWidgets.QPushButton('Clear')
+		#TODO: FIX SIGNALLIG CODE
+		# self.buttons['clear'].connect(self.buttons['clear'],QtCore.SIGNAL('clicked()'),self.clearTerminal)
 		self.trees['config'].setItemWidget(self.trees['clear'],1,self.buttons['clear'])
 		self.trees['config'].expandAll()
 
@@ -155,8 +160,8 @@ class module(object):
 				res=self.iCeDeROM.modules['gui'].dialogs['message'].information(
 					self.iCeDeROM.modules['gui'].window,
 					'File Question', 'File already exist! Do you want to overwrite?',
-					QtGui.QMessageBox.Yes|QtGui.QMessageBox.No)
-				if res==QtGui.QMessageBox.No:
+					QtWidgets.QMessageBox.Yes|QtWidgets.QMessageBox.No)
+				if res==QtWidgets.QMessageBox.No:
 					self.buttons['logtofile'].setChecked(False)
 					return
 			self.parent.logFileStart(self.logFileName)
@@ -198,7 +203,7 @@ class module(object):
 		if data=='': return
 		self.texts[self.name].insertPlainText(data)
 		if self.buttons['autoscroll'].isChecked():
-			self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
+			self.texts[self.name].moveCursor(QtWidgets.QTextCursor.End, QtWidgets.QTextCursor.MoveAnchor)
 
 	def clearTerminal(self):
 		self.texts[self.name].setPlainText('')
