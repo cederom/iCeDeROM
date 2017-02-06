@@ -35,12 +35,15 @@ Operating System Package Management.
 project root (that is where `venv.sh` is located). This location is important!
 * If you work with [PyCharm IDE](https://www.jetbrains.com/pycharm/) go to `Preferences / Project / Interpreter`
 and use creator to make all work for you.
-* You can create Virtualenv from a Terminal:
+* You can create Virtualenv from a Terminal (`copies` will copy the
+files instead of creating symlinks, `clear` will clear the target directory
+if existed previously):
 ```
 $ mkdir ../venv
-$ python3.6 -m venv ../venv/macos-python-3.6
+$ python3.6 -m venv --copies --clear ../venv/macos-python-3.6
 $ ln -s macos-python-3.6 ../venv/default
 ```
+
 * You can have multiple instances of virtualenv in `../venv` directory,
 for instance when you develop on [MacOS](https://en.wikipedia.org/wiki/MacOS)
 and deploy on [FreeBSD](https://en.wikipedia.org/wiki/FreeBSD),
