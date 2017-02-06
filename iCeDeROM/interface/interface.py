@@ -82,7 +82,7 @@ class module(object):
             self.devices[params['name']] = __import__(params['name'], fromlist=['']).module(**params)
             self.devices[params['name']].parent = self
             self.iCeDeROM.modules['log'].log.debug('Added ' + params['name'] + ' interface device.')
-            if self.ui.has_key('qt'):
+            if 'qt' in self.ui:
                 self.ui['qt'].stacks['config'].addWidget(
                     self.devices[params['name']].ui['qt'])
         except:
@@ -100,10 +100,10 @@ class module(object):
 		Parameters:
 			name     is the name of interface to be selected as default.
 		"""
-        if not params.has_key('name'):
+        if not 'name' in params:
             self.iCeDeROM.modules['log'].error('name parameter reference mandatory!')
             raise KeyError('name parameter reference mandatory!')
-        if self.devices.has_key(params['name']):
+        if params['name'] in self.devices:
             self.device = self.devices[params['name']]
             self.iCeDeROM.modules['gui'].labels['interface'].setText(self.device.name)
             self.iCeDeROM.modules['log'].log.info('Selected ' + params['name'] + ' as the default interface device.')

@@ -25,7 +25,7 @@ class module(object):
 		Note: Use Setup routine to connect to a physical Device.
 		"""
         self.name = 'ftdi.uart'
-        if not params.has_key('iCeDeROM'):
+        if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
         self.iCeDeROM = params['iCeDeROM']
         self.capabilities = ['uart']
@@ -56,40 +56,40 @@ class module(object):
 		"""
         cfg = dict()
         try:
-            if params.has_key('vid'):
+            if 'vid' in params:
                 if type(params['vid']) == type('a'):
                     params['vid'] = int(params['vid'], base=16)
                     self.devcfg['vid'] = params['vid']
                 if pylibftdi.USB_VID_LIST.count(params['vid']) == 0:
                     pylibftdi.USB_VID_LIST.append(params['vid'])
-            if params.has_key('pid'):
+            if 'pid' in params:
                 if type(params['pid']) == type('a'):
                     params['pid'] = int(params['pid'], base=16)
                     self.devcfg['pid'] = params['pid']
                 if pylibftdi.USB_PID_LIST.count(params['pid']) == 0:
                     pylibftdi.USB_PID_LIST.append(params['pid'])
-            if params.has_key('serial'):
+            if 'serial' in params:
                 if params['serial'] != '':
                     cfg['device_id'] = params['serial']
-            if params.has_key('channel'):
+            if 'channel' in params:
                 cfg['interface_select'] = params['channel']
-            if params.has_key('mode'):
+            if 'mode' in params:
                 mode = params['mode']
                 if str(mode).lower()[0] == 't':
                     cfg['mode'] = params['mode'] = 't'
                 else:
                     cfg['mode'] = params['mode'] = 'b'
-            if params.has_key('encoding'):
+            if 'encoding' in params:
                 cfg['encoding'] = params['encoding']
-            if params.has_key('index'):
+            if 'index' in params:
                 index = int(params['index'])
                 if index > 0:
                     cfg['device_index'] = index
-            if params.has_key('interface'):
+            if 'interface' in params:
                 cfg['interface_select'] = int(params['interface'])
         except:
             self.iCeDeROM.modules['log'].log.exception('Invalid FTDI UART configuration!')
-            if self.iCeDeROM.modules.has_key('gui'):
+            if 'gui' in self.iCeDeROM.modules:
                 self.iCeDeROM.modules['gui'].dialogs['message'].critical(
                     params['iCeDeROM'].modules['gui'].window,
                     'FTDI UART Interface', 'Invalid FTDI UART Interface confguration!')
@@ -99,14 +99,14 @@ class module(object):
             self.device = pylibftdi.Device(**cfg)
         except:
             self.iCeDeROM.modules['log'].log.exception('FTDI UART Interface setup failed!')
-            if self.iCeDeROM.modules.has_key('gui'):
+            if 'gui' in self.iCeDeROM.modules:
                 self.iCeDeROM.modules['gui'].dialogs['message'].critical(
                     params['iCeDeROM'].modules['gui'].window,
                     'FTDI UART Interface', 'FTDI UART Interface setup failed!')
             return False
-        if params.has_key('mode'):
+        if 'mode' in params:
             self.devcfg['mode'] = params['mode']
-        if params.has_key('baudrate'):
+        if 'baudrate' in params:
             self.devcfg['baudrate'] = int(params['baudrate'])
             self.device.baudrate = self.devcfg['baudrate']
         self.iCeDeROM.modules['log'].log.info('FTDI UART Interface connected: vid=' +
@@ -117,11 +117,11 @@ class module(object):
         self.iCeDeROM.modules['interface'].device = self
 
     def start(self, **params):
-        if self.ui.has_key('qt'):
+        if 'qt' in self.ui:
             self.ui['qt'].start(**params)
 
     def stop(self, **params):
-        if self.ui.has_key('qt'):
+        if 'qt' in self.ui:
             self.ui['qt'].stop(**params)
 
     def write(self, data):

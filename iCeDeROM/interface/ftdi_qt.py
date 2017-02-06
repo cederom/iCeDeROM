@@ -19,7 +19,7 @@ class module(QtGui.QWidget):
     def __init__(self, **params):
         """Create QtWidget."""
         self.name = 'ftdi.uart_qt'
-        if not params.has_key('iCeDeROM'):
+        if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
         if params['iCeDeROM'].ui != 'qt':
             raise RuntimeError('Interface QtWidget requires Qt GUI running!')
@@ -34,7 +34,7 @@ class module(QtGui.QWidget):
         self.defaults['interface'] = 'KT-LINK'
         self.devcfg = dict()
         self.parent = None
-        if params.has_key('parent'): self.parent = params['parent']
+        if 'parent' in params: self.parent = params['parent']
         self.createQtWidget(**params)
 
     def setup(self, **params):
@@ -156,7 +156,7 @@ class module(QtGui.QWidget):
 		Parameters:
 			name      is the name of interface module to add.
 		"""
-        if not params.has_key('name'):
+        if not 'name' in params:
             raise KeyError('name parameter reference mandatory!')
         if self.iCeDeROM.ui != 'qt':
             raise RuntimeError('Interface QtWidget requires Qt GUI running!')

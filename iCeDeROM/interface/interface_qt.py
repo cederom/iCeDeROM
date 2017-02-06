@@ -79,7 +79,7 @@ class module(QtWidgets.QTabWidget):
 		Parameters:
 			name      is the name of interface module to add.
 		"""
-        if not params.has_key('name'):
+        if not 'name' in params:
             raise KeyError('name parameter reference mandatory!')
         if self.iCeDeROM.ui != 'qt':
             raise RuntimeError('Interface QtWidget requires Qt GUI running!')
@@ -92,9 +92,9 @@ class module(QtWidgets.QTabWidget):
 		Parameters:
 			name     is the interface name to be selected.
 		"""
-        if not params.has_key('name'):
+        if not 'name' in params:
             raise KeyError('name parameter reference mandatory!')
-        if self.iCeDeROM.modules['interface'].devices.has_key(params['name']):
+        if params['name'] in self.iCeDeROM.modules['interface'].devices:
             if self.device != None:
                 self.device.stop()
             self.device = self.iCeDeROM.modules['interface'].devices[params['name']]

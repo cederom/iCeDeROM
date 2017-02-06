@@ -4,7 +4,7 @@
 #
 # iCeDeROM: In-Circuit Evaluate Debug and Edit for Research on Microelectronics
 # Module 'Memory' (memory buffer module to store data).
-# (C) 2015 Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
+# (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
 import io
@@ -57,7 +57,7 @@ class module(object):
             self.buffer = io.open(filename, mode='a+', buffering=self.chunksize)
             self.size = self.buffer.seek(0, io.SEEK_END)
             self.filename = filename
-            if self.ui.has_key('qt'):
+            if 'qt' in self.ui:
                 self.ui['qt'].window.statusBar().showMessage(str(self.filename))
         except:
             self.iCeDeROM.modules['log'].log.exception('Error opening file!')
@@ -76,23 +76,23 @@ class module(object):
                 newbuffer.write(self.buffer.read())
             except:
                 self.iCeDeROM.modules['log'].log.exception('Error saving new file!')
-                if self.ui.has_key('qt'):
+                if 'qt' in self.ui:
                     self.iCeDeROM.modules['gui'].dialogs['message'].warning(
                         self.iCeDeROM.modules['gui'].window,
                         'Error', 'Error saving new file!\n' + str(self.filename))
             self.buffer.close()
             self.buffer = newbuffer
-            if self.ui.has_key('qt'):
+            if 'qt' in self.ui:
                 self.ui['qt'].window.statusBar().showMessage(str(self.filename))
 
     def fileClose(self):
         try:
             self.buffer.close()
-            if self.ui.has_key('qt'):
+            if 'qt' in self.ui:
                 self.ui['qt'].window.statusBar().showMessage('')
         except:
             self.iCeDeROM.modules['log'].log.exception('Error closing file!')
-            if self.ui.has_key('qt'):
+            if 'qt' in self.ui:
                 self.iCeDeROM.modules['gui'].dialogs['message'].warning(
                     self.iCeDeROM.modules['gui'].window,
                     'Error', 'Error closing file!\n' + str(self.filename))
