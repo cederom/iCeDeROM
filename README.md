@@ -13,44 +13,71 @@ iCeDeROM was started by Tomasz Bolesław CEDRO (http://www.tomek.cedro.info) in 
 # Features
 
 ## Available Features
-* Qt4 GUI: MDI (Multiple Document Interface) for modules windows, Panels for configuration, etc.
-* Logging: loglevels, file output, QtWidget output.
-* Python Console: buil-it python interpreter with access to all modules, QtWidget CLI.
-* Interface: various hardware interface infrastructure, QtWidget configuration.
-* Terminal: Serial Console Port terminal, QtWidget CLI.
+
+[X] Python 2.7
+  [ ] Switch to Python 3.6.
+  [ ] Run all from Virtualenv.
+  [ ] Automate Python+Virtualenv+Dependencies setup.
+[X] Qt4 GUI: MDI (Multiple Document Interface) for modules windows, Panels for configuration, etc.
+  [ ] Switch to PyQt5.
+[X] Logging: loglevels, file output, QtWidget output.
+[X] Python Console: buil-it python interpreter with access to all modules, QtWidget CLI.
+[X] Interface: various hardware interface infrastructure, QtWidget configuration.
+[X] Terminal: Serial Console Port terminal, QtWidget CLI.
 
 
 ## Planned Features
 
-* Common iCeDeROM API.
-* No GUI operaitons (i.e. shell only).
-* Python scripts automation.
-* Interface Bitbang.
-* Transport Layer between Target Device and Interface Layer.
-* Various Hardware Interfaces support.
-* Memory buffer, chunk-based.
-* Hex Editor.
-* JTAG Support.
-* SWD Support.
-* MIPS CPU Support.
-* ARM CPU Support.
-* Intel CPU Support.
-* Debugging.
-* Memory Analysis.
+[ ] Common iCeDeROM API.
+[ ] No GUI operaitons (i.e. shell only).
+[ ] Python scripts automation.
+[ ] Interface Bitbang.
+[ ] Transport Layer between Target Device and Interface Layer.
+[ ] Various Hardware Interfaces support.
+[ ] Memory buffer, chunk-based.
+[ ] Hex Editor.
+[ ] JTAG Support.
+[ ] SWD Support.
+[ ] MIPS CPU Support.
+[ ] ARM CPU Support.
+[ ] Intel CPU Support.
+[ ] Debugging.
+[ ] Memory Analysis.
 
 
 # Requirements, Dependencies, Hardware
 
+## Python Virtual Environment
+
+Soon, a switch from Python2.7 to Python3.6 is planned. That would help
+keeping all dependencies coherent and independent from underlying
+operating system packages. See [Virtualenv](doc/virtualenv.md) manual
+for more information.
+* Python Virtualenv location is assumed to be `../venv/default/bin/python`
+* `venv.sh` script will bring you inside virtualenv for testing.
+* `iCeDeROM.sh` script will launch application using virtualenv.
+
 ## Software Dependencies
-* Python 2.7
-* PyQt4
+* Python 2.7 (soon switching to Python3.6)
+* PyQt4 (soon switching to PyQt5)
 * GitPython (download with pip)
 * pyLibFTDI (download with pip)
+
+A dedicated [requirements.txt](requirements.txt) file has been provided
+that will help you install dependencies with `pip`:
+
+```
+pip install -r requirements.txt
+```
 
 ## Supported Hardware
 * FTDI USB Dongles - using LibFTDI wrapper
 * Serial Console Port
  * Manual and Preset Configuration (presets available for <a href="http://shop.kristech.pl/p/24/257/kt-link-.html" target="_blank">KT-LINK</a>)
+
+## Documentation
+
+* [Virtualenv](doc/virtualenv.md): Python Virtual Environment Reference Manual.
 
 
 ## Developer's Scratchpad
@@ -267,5 +294,5 @@ class module(QtGui.QWidget):
  3. Mordechai Guri, Yuri Poliak , Bracha Shapira, Yuval Elovici, ["JoKER: Trusted Detection of Kernel Rootkits in Android Devices via JTAG Interface"](http://arxiv.org/ftp/arxiv/papers/1512/1512.04116.pdf), Trustcom/BigDataSE/ISPA, 2015 IEEE  (Volume:1), 20-22 Aug. 2015, 65 - 73, INSPEC Accession Number: 15635781. DOI: 10.1109/Trustcom.2015.358.
 
 
-*iCeDeROM (C) 2014-2015 CeDeROM, Tomasz Bolesław CEDRO (http://www.tomek.cedro.info), All rights reserved! :-)*
+*iCeDeROM (C) 2014-2017 CeDeROM, Tomasz Bolesław CEDRO (http://www.tomek.cedro.info), All rights reserved! :-)*
 
