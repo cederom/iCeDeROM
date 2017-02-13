@@ -7,49 +7,59 @@ http://www.icederom.com
 # About
 iCeDeROM - a Swiss Army Knife Multi-Tool for Digital Electronics - is a platform and hardware independent python-based low-level development and analysis software utility to work with microelectronic devices such as embedded and computer systems.
 
-iCeDeROM was started by Tomasz Bolesław CEDRO (http://www.tomek.cedro.info) in 2014 as an Open-Source project.
+iCeDeROM was started by CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info) in 2014 as an Open-Source project.
 
 
 # Features
 
-## Available Features
+## Available Features / Work in Progress..
 
-[X] Python 2.7
-  [ ] Switch to Python 3.6.
-  [ ] Run all from Virtualenv.
-  [ ] Automate Python+Virtualenv+Dependencies setup.
-[X] Qt4 GUI: MDI (Multiple Document Interface) for modules windows, Panels for configuration, etc.
-  [ ] Switch to PyQt5.
-[X] Logging: loglevels, file output, QtWidget output.
-[X] Python Console: buil-it python interpreter with access to all modules, QtWidget CLI.
-[X] Interface: various hardware interface infrastructure, QtWidget configuration.
-[X] Terminal: Serial Console Port terminal, QtWidget CLI.
+- [X] Python 3.6.
+  - [X] Switch from Python 2.7 to Python 3.6.
+  - [X] Run all from Virtualenv.
+  - [ ] Make sure all functions work on Python3.6.
+  - [ ] Automate Python+Virtualenv+Dependencies setup.
+- [X] Qt5 GUI: MDI (Multiple Document Interface) for modules windows, Panels for configuration, etc.
+  - [X] Switch from PyQt4 to PyQt5.
+  - [ ] Make sure all functions work on PyQt5.
+- [X] Logging: loglevels, file output, QtWidget output.
+  - [ ] Fix broken logging after switch to PyQt5.
+- [X] Python Console: buil-it python interpreter with access to all modules, QtWidget CLI.
+  - [ ] Add prompt to built-int interpreter shell.
+- [X] Interface: various hardware interface infrastructure, QtWidget configuration.
+  - [ ] Make Terminal use Interface encoding.
+- [X] Terminal
+  - [x] Serial Console Port terminal
+  - [X] QtWidget CLI
+  - [ ] Terminal history search.
+  - [ ] RegExp search.
+  - [ ] Terminal cursor/move/select/append fixes.
 
 
 ## Planned Features
 
-[ ] Common iCeDeROM API.
-[ ] No GUI operaitons (i.e. shell only).
-[ ] Python scripts automation.
-[ ] Interface Bitbang.
-[ ] Transport Layer between Target Device and Interface Layer.
-[ ] Various Hardware Interfaces support.
-[ ] Memory buffer, chunk-based.
-[ ] Hex Editor.
-[ ] JTAG Support.
-[ ] SWD Support.
-[ ] MIPS CPU Support.
-[ ] ARM CPU Support.
-[ ] Intel CPU Support.
-[ ] Debugging.
-[ ] Memory Analysis.
+- [ ] Common iCeDeROM API.
+- [ ] No GUI operaitons (i.e. shell only).
+- [ ] Python scripts automation.
+- [ ] Interface Bitbang.
+- [ ] Transport Layer between Target Device and Interface Layer.
+- [ ] Various Hardware Interfaces support.
+- [ ] Memory buffer, chunk-based.
+- [ ] Hex Editor.
+- [ ] JTAG Support.
+- [ ] SWD Support.
+- [ ] MIPS CPU Support.
+- [ ] ARM CPU Support.
+- [ ] Intel CPU Support.
+- [ ] Debugging.
+- [ ] Memory Analysis.
 
 
 # Requirements, Dependencies, Hardware
 
 ## Python Virtual Environment
 
-Soon, a switch from Python2.7 to Python3.6 is planned. That would help
+A switch from Python2.7 to Python3.6 is almost complete. This helps
 keeping all dependencies coherent and independent from underlying
 operating system packages. See [Virtualenv](doc/virtualenv.md) manual
 for more information.
@@ -58,8 +68,8 @@ for more information.
 * `iCeDeROM.sh` script will launch application using virtualenv.
 
 ## Software Dependencies
-* Python 2.7 (soon switching to Python3.6)
-* PyQt4 (soon switching to PyQt5)
+* Python 3.6.
+* PyQt5.
 * GitPython (download with pip)
 * pyLibFTDI (download with pip)
 
@@ -71,11 +81,17 @@ pip install -r requirements.txt
 ```
 
 ## Supported Hardware
-* FTDI USB Dongles - using LibFTDI wrapper
-* Serial Console Port
- * Manual and Preset Configuration (presets available for <a href="http://shop.kristech.pl/p/24/257/kt-link-.html" target="_blank">KT-LINK</a>)
 
-## Documentation
+- [X] FTDI USB Dongles
+  - [X] Use LibFTDI. No need to install device driver!
+- [X] Serial Console Port
+  - [X] LibFTDI based, no need to install device driver!
+  - [X] Manual and Preset Configuration (presets available for <a href="http://shop.kristech.pl/p/24/257/kt-link-.html" target="_blank">KT-LINK</a>)
+
+
+# Documentation
+
+## Manuals
 
 * [Virtualenv](doc/virtualenv.md): Python Virtual Environment Reference Manual.
 
@@ -85,6 +101,8 @@ pip install -r requirements.txt
 iCeDeROM is supposed to work as standalone application, but it should be also possible to include it as Python module into external application. As for now all efforts are put into core functionalities, API clarification and Qt4 GUI. In future standalone operations in console and/or scripted invocation should be possible..
 
 Modular design makes it possible to add new functionalities easily by use of existing software components that provide Python bindings. It should be also possible to interact with binaries and libraries that have no Python bindings. External modules and applications should be wrapped and adapted to work with iCeDeROM. Yet, no stable API is established. Below a functional proposition is presented.
+
+Please note that below examples are just example of the organization. I am switching to Python3.6 and PyQt5 now..
 
 Here is an example Core Module - a set of objects and functions wrapped in a Python Module:
 ```python
