@@ -12,10 +12,10 @@ class module(object):
 
     def __init__(self, **params):
         """
-		Create Module and QtWidget if necessary.
-		Parameters:
-			iCeDeROM module reference (mandatory).
-		"""
+        Create Module and QtWidget if necessary.
+        Parameters:
+            iCeDeROM module reference (mandatory).
+        """
         self.name = 'terminal'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
@@ -74,4 +74,5 @@ class module(object):
         self.logFileEnabled = False
 
     def logFileWrite(self, data):
-        if self.logFileEnabled: self.logFile.write(data)
+        #TODO: FIX HARDCODED UTF ENCODING / ADD TERMINAL ENCODING
+        if self.logFileEnabled: self.logFile.write(bytearray(source=data, encoding="UTF-8"))

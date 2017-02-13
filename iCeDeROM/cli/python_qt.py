@@ -7,13 +7,13 @@
 # (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtWidgets, QtGui
 
 
 class module(object):
     """
-	Provides Qt Widget for modules.cli.python iCeDeROM module.
-	"""
+    Provides Qt Widget for modules.cli.python iCeDeROM module.
+    """
 
     def __init__(self, **params):
         """Create Qt Widget for Python CLI."""
@@ -74,29 +74,27 @@ class module(object):
 
     def keyPressEvent(self, QKeyEvent):
         """Extend the QTextEdit key press event, add routines, then call the original method."""
-        # TODO: FIX MISSING CURSOR CODE
-        pass
-        # cursor=self.texts[self.name].textCursor()
+        cursor=self.texts[self.name].textCursor()
         if QKeyEvent.key() == QtCore.Qt.Key_Return:
             # Handle Return key -> execute python command
-            # cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
-            self.texts[self.name].moveCursor(QtWidgets.QTextCursor.End, QtWidgets.QTextCursor.MoveAnchor)
+            cursor.select(QtGui.QTextCursor.LineUnderCursor)
+            self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
             self.texts[self.name].setTextCursor(cursor)
-            self.command = unicode(self.texts[self.name].textCursor().selectedText())
-            self.texts[self.name].moveCursor(QtWidgets.QTextCursor.End, QtWidgets.QTextCursor.MoveAnchor)
+            self.command = self.texts[self.name].textCursor().selectedText()
+            self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
             self.texts[self.name].insertPlainText('\n')
-            self.texts[self.name].moveCursor(QtWidgets.QTextCursor.End, QtWidgets.QTextCursor.MoveAnchor)
+            self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
             self.historyAppend(self.command)
             self.execute(self.command)
         elif QKeyEvent.key() == QtCore.Qt.Key_Up:
             # Display history item
             if self.history_index > 0: self.history_index -= 1
-            cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+            cursor.select(QtGui.QTextCursor.LineUnderCursor)
             self.texts[self.name].setTextCursor(cursor)
             self.texts[self.name].insertPlainText(self.history[self.history_index])
             # Highlight last history item
             if self.history_index == len(self.history) - 1:
-                cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+                cursor.select(QtGui.QTextCursor.LineUnderCursor)
                 self.texts[self.name].setTextCursor(cursor)
         elif QKeyEvent.key() == QtCore.Qt.Key_Down:
             # Display history item
@@ -104,39 +102,37 @@ class module(object):
                 self.history_index += 1
             else:
                 self.history_index = len(self.history) - 1
-            cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+            cursor.select(QtGui.QTextCursor.LineUnderCursor)
             self.texts[self.name].setTextCursor(cursor)
             self.texts[self.name].insertPlainText(self.history[self.history_index])
             # Highlight last history item
             if self.history_index == len(self.history) - 1:
-                cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+                cursor.select(QtGui.QTextCursor.LineUnderCursor)
                 self.texts[self.name].setTextCursor(cursor)
         elif QKeyEvent.key() == QtCore.Qt.Key_PageUp:
             # Display history item
             self.history_index = 0
-            cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+            cursor.select(QtGui.QTextCursor.LineUnderCursor)
             self.texts[self.name].setTextCursor(cursor)
             self.texts[self.name].insertPlainText(self.history[self.history_index])
         elif QKeyEvent.key() == QtCore.Qt.Key_PageDown:
             # Display history item
             self.history_index = len(self.history) - 1
-            cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+            cursor.select(QtGui.QTextCursor.LineUnderCursor)
             self.texts[self.name].setTextCursor(cursor)
             self.texts[self.name].insertPlainText(self.history[self.history_index])
             # Highlight last history item
             if self.history_index == len(self.history) - 1:
-                cursor.select(QtWidgets.QTextCursor.LineUnderCursor)
+                cursor.select(QtGui.QTextCursor.LineUnderCursor)
                 self.texts[self.name].setTextCursor(cursor)
         else:
             # No more key extensions, call the original handler
             self.texts[self.name].keyPressEventOrig(QKeyEvent)
 
     def write(self, data):
-        '''STDOUT write wrapper.'''
-        # TODO: FIX MISSING CURSOR CODE
-        return
+        """STDOUT write wrapper."""
         self.texts[self.name].insertPlainText(data)
-        self.texts[self.name].moveCursor(QtWidgets.QTextCursor.End, QtWidgets.QTextCursor.MoveAnchor)
+        self.texts[self.name].moveCursor(QtGui.QTextCursor.End, QtGui.QTextCursor.MoveAnchor)
 
     def execute(self, command):
         """Super class should replace this with python evaluation routine."""

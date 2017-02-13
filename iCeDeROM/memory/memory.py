@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 # vim: set fileencoding=UTF-8 :
 #
@@ -18,10 +18,10 @@ class module(object):
 
     def __init__(self, **params):
         """
-		Create Module and QtWidget if necessary.
-		Parameters:
-			iCeDeROM module reference (mandatory).
-		"""
+        Create Module and QtWidget if necessary.
+        Parameters:
+            iCeDeROM module reference (mandatory).
+        """
         self.name = 'memory'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')

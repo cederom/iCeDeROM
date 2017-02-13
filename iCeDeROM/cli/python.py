@@ -14,6 +14,7 @@ class module(object):
 	"""
 	Provides interactive Python shell with Qt GUI capabilities.
 	"""
+
 	def __init__(self, **params):
 		"""Creates logger."""
 		self.name='python'

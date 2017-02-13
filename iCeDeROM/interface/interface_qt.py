@@ -12,8 +12,8 @@ from PyQt5 import QtCore, QtWidgets
 
 class module(QtWidgets.QTabWidget):
     """
-	Provides basic Qt GUI for iCeDeROM_Driver.
-	"""
+    Provides basic Qt GUI for iCeDeROM_Driver.
+    """
 
     def __init__(self, **params):
         """Creates QtWidget."""
@@ -64,9 +64,8 @@ class module(QtWidgets.QTabWidget):
     def setupQtWidget(self, **params):
         self.groups['device'].setFixedWidth(250)
         self.layouts['interface'].addWidget(self.groups['device'])
-        # TODO: FIX SIGNALLING CODE
-        # self.connect(self.buttons['default'],
-        #	QtCore.SIGNAL('clicked()'), lambda:self.test(**params))
+        # TODO: FIX MISSING HANDLER CODE
+        #self.buttons['default'].clicked.connect(lambda:self.setDefault(**params))
         self.layouts['device'].addWidget(self.lists['device'])
         self.layouts['device'].addWidget(self.buttons['default'])
         self.layouts['interface'].addWidget(self.groups['config'])
@@ -75,10 +74,10 @@ class module(QtWidgets.QTabWidget):
 
     def addDevice(self, **params):
         """
-		Add Device Module to the devices list.
-		Parameters:
-			name      is the name of interface module to add.
-		"""
+        Add Device Module to the devices list.
+        Parameters:
+            name      is the name of interface module to add.
+        """
         if not 'name' in params:
             raise KeyError('name parameter reference mandatory!')
         if self.iCeDeROM.ui != 'qt':
@@ -87,11 +86,11 @@ class module(QtWidgets.QTabWidget):
 
     def select(self, **params):
         """
-		Handle Qt GUI the selection from the interface device list.
-		Device interface configuration is displayed.
-		Parameters:
-			name     is the interface name to be selected.
-		"""
+        Handle Qt GUI the selection from the interface device list.
+        Device interface configuration is displayed.
+        Parameters:
+            name     is the interface name to be selected.
+        """
         if not 'name' in params:
             raise KeyError('name parameter reference mandatory!')
         if params['name'] in self.iCeDeROM.modules['interface'].devices:

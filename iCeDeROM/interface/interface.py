@@ -7,23 +7,25 @@
 # (C) 2014-2017 CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.info)
 # All rights reserved, so far :-)
 
-devices = ['modules.interface.ftdi']
+import importlib
+
+devices = ['iCeDeROM.interface.ftdi']
 
 
 class module(object):
     """
-	Provides physical/electrical device driver comms.
-	Various interface device modules can be loaded into the dictionary of devices.
-	One of the device interfaces can be selected as default, 
-	but others may still be used via self.devices dict() directly.
-	"""
+    Provides physical/electrical device driver comms.
+    Various interface device modules can be loaded into the dictionary of devices.
+    One of the device interfaces can be selected as default,
+    but others may still be used via self.devices dict() directly.
+    """
 
     def __init__(self, **params):
         """
-		Create iCeDeROM_Interface Module.
-		Parameters:
-			iCeDeROM is the reference to the iCeDeROM object.
-		"""
+        Create iCeDeROM_Interface Module.
+        Parameters:
+            iCeDeROM is the reference to the iCeDeROM object.
+        """
         self.name = 'interface'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
@@ -57,10 +59,10 @@ class module(object):
 
     def list(self, **params):
         """
-		Returns dictionary of loaded interface devices.
-		This funcion will also log loaded interface devices
-		and update the list inside UI if possible.
-		"""
+        Returns dictionary of loaded interface devices.
+        This funcion will also log loaded interface devices
+        and update the list inside UI if possible.
+        """
         self.iCeDeROM.modules['log'].log.info(
             'Loaded interface devices: ' + str(self.devices.keys()))
         if 'qt' in self.ui:
@@ -70,16 +72,16 @@ class module(object):
 
     def load(self, **params):
         """Load interface device object to a list of available device drivers.
-		Device object constructor is called here, but some devices may be
-		attached to a physical interface at setup() or start() stage
-		as additional configuration parameters may be obligatory to connect.
-		If device was already loaded it will be replaced by new load.
-		Params:
-			name     is a driver module name (mandatory).
-		"""
+        Device object constructor is called here, but some devices may be
+        attached to a physical interface at setup() or start() stage
+        as additional configuration parameters may be obligatory to connect.
+        If device was already loaded it will be replaced by new load.
+        Params:
+            name     is a driver module name (mandatory).
+        """
         try:
             params['iCeDeROM'] = self.iCeDeROM
-            self.devices[params['name']] = __import__(params['name'], fromlist=['']).module(**params)
+            self.devices[params['name']] = importlib.import_module(params['name']).module(**params)
             self.devices[params['name']].parent = self
             self.iCeDeROM.modules['log'].log.debug('Added ' + params['name'] + ' interface device.')
             if 'qt' in self.ui:
@@ -95,11 +97,11 @@ class module(object):
 
     def setDefault(self, **params):
         """
-		Select the default device for iCeDeROM_Interface Module.
-		Device must be already loaded to devices dict with prior load() call.
-		Parameters:
-			name     is the name of interface to be selected as default.
-		"""
+        Select the default device for iCeDeROM_Interface Module.
+        Device must be already loaded to devices dict with prior load() call.
+        Parameters:
+            name     is the name of interface to be selected as default.
+        """
         if not 'name' in params:
             self.iCeDeROM.modules['log'].error('name parameter reference mandatory!')
             raise KeyError('name parameter reference mandatory!')
@@ -111,11 +113,11 @@ class module(object):
             self.iCeDeROM.modules['log'].log.warning('Interface device ' + params['name'] + ' is not yet loaded!')
 
     def write(self, data):
-        if self.device == None:
+        if self.device is None:
             raise IOError('Interface not yet initialized!')
         self.device.write(data)
 
     def read(self, length):
-        if self.device == None:
+        if self.device is None:
             raise IOError('Interface not yet initialized!')
         return self.device.read(length)

@@ -18,10 +18,10 @@ class module(object):
 
     def __init__(self, **params):
         """
-		Create Module and QtWidget.
-		Parameters:
-			iCeDeROM module reference (mandatory).
-		"""
+        Create Module and QtWidget.
+        Parameters:
+            iCeDeROM module reference (mandatory).
+        """
         self.name = 'QtMdiChildExampleModule'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
@@ -47,10 +47,10 @@ class QtWidget(QtWidgets.QMainWindow):
 
     def __init__(self, **params):
         """
-		Create window and add it to the iCeDeROM GUI.
-		Parameters:
-			iCeDeROM module reference (mandatory).
-		"""
+        Create window and add it to the iCeDeROM GUI.
+        Parameters:
+            iCeDeROM module reference (mandatory).
+        """
         self.name = 'QtMdiChildExampleWindow'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
@@ -64,10 +64,9 @@ class QtWidget(QtWidgets.QMainWindow):
             self.iCeDeROM.modules['log'].log.critical('Cannot addSubWindow!')
             raise
         self.window.setWindowTitle('QtMdiChildExample')
+        self.window.pushButton.clicked.connect(lambda: self.listModules(**params))
+        self.window.pushButton_2.clicked.connect(lambda: self.logMessage(**params))
 
-    # TODO: FIX SIGNALS CODE
-    # self.window.connect(self.window.pushButton, QtCore.SIGNAL('clicked()'), lambda:self.listModules(**params))
-    # self.window.connect(self.window.pushButton_2, QtCore.SIGNAL('clicked()'), lambda:self.logMessage(**params))
     def setup(self, **params):
         return
 

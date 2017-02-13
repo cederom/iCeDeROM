@@ -8,13 +8,14 @@
 # All rights reserved, so far :-)
 
 import os
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import Qt, QtGui, QtCore, QtWidgets
 
+READ_BYTES_CHUNK_SIZE = 256
 
 class module(object):
     """
-	Provides Qt Widget for modules.cli.terminal iCeDeROM module.
-	"""
+    Provides Qt Widget for modules.cli.terminal iCeDeROM module.
+    """
 
     def __init__(self, **params):
         """Create Qt Widget for Terminal CLI."""
@@ -23,6 +24,8 @@ class module(object):
             raise KeyError('iCeDeROM parameter reference mandatory!')
         if not 'gui' in params['iCeDeROM'].modules:
             raise RuntimeError('Terminal QtWidget requires GUI running!')
+        if not 'parent' in params:
+            raise RuntimeError('Terminal requires Parent to run!')
         self.iCeDeROM = params['iCeDeROM']
         self.parent = params['parent'] if 'parent' in params else None
         self.windows = dict()
@@ -69,9 +72,7 @@ class module(object):
     def createQtWidgetMdiWindow(self, **params):
         self.windows[self.name] = QtWidgets.QMainWindow()
         self.texts[self.name] = QtWidgets.QTextEdit(self.windows[self.name])
-
-    # TODO: FIX COMPONENT CODE
-    # self.fonts[self.name]=QtWidgets.QFont('courier')
+        self.fonts[self.name]=QtGui.QFont('courier')
 
     def createQtWidgetMenu(self, **params):
         self.menus[self.name] = QtWidgets.QMenu('Terminal')
@@ -95,9 +96,8 @@ class module(object):
         self.windows[self.name].setWindowTitle('Terminal')
         self.windows[self.name].setCentralWidget(self.texts[self.name])
         self.windows[self.name].statusBar()
-        self.texts[self.name].setReadOnly(False)
-        # TODO: FIX COMPONENT CODE / SEE ABOVE FONT INIT
-        # self.texts[self.name].setFont(self.fonts[self.name])
+        #self.texts[self.name].setReadOnly(False)
+        self.texts[self.name].setFont(self.fonts[self.name])
         self.texts[self.name].setAcceptRichText(False)
         self.texts[self.name].keyPressEvent = self.keyPressEvent
         self.texts[self.name].insertFromMimeData = self.insertFromMimeData
@@ -132,17 +132,13 @@ class module(object):
                                                              'Stream Terminal data to a local file.'])
         self.buttons['logtofile'] = QtWidgets.QCheckBox()
         self.buttons['logtofile'].setTristate(False)
-        # TODO: FIX SIGNALLING CODE
-        # self.buttons['logtofile'].connect(
-        #	self.buttons['logtofile'],QtCore.SIGNAL('stateChanged(int)'),self.logFileToggle)
+        self.buttons['logtofile'].stateChanged.connect(self.logFileToggle)
         self.trees['config'].setItemWidget(self.trees['logtofile'], 1, self.buttons['logtofile'])
         self.trees['logfilename'] = QtWidgets.QTreeWidgetItem(self.trees['logfile'],
                                                               ['Filename', '', self.logFileName])
         self.buttons['logfilename'] = QtWidgets.QPushButton('Select')
         self.trees['config'].setItemWidget(self.trees['logfilename'], 1, self.buttons['logfilename'])
-        # TODO: FIX SIGNALLING CODE
-        # self.buttons['logfilename'].connect(
-        #	self.buttons['logfilename'],QtCore.SIGNAL('clicked()'),self.logFileSelect)
+        self.buttons['logfilename'].clicked.connect(self.logFileSelect)
         # Display branch
         self.trees['display'] = QtWidgets.QTreeWidgetItem(self.trees['config'], ['Display'])
         self.trees['autoscroll'] = QtWidgets.QTreeWidgetItem(self.trees['display'],
@@ -154,8 +150,7 @@ class module(object):
         self.trees['clear'] = QtWidgets.QTreeWidgetItem(self.trees['display'],
                                                         ['Clear', '', 'Crear Terminal.'])
         self.buttons['clear'] = QtWidgets.QPushButton('Clear')
-        # TODO: FIX SIGNALLIG CODE
-        # self.buttons['clear'].connect(self.buttons['clear'],QtCore.SIGNAL('clicked()'),self.clearTerminal)
+        self.buttons['clear'].clicked.connect(self.clearTerminal)
         self.trees['config'].setItemWidget(self.trees['clear'], 1, self.buttons['clear'])
         self.trees['config'].expandAll()
 
@@ -180,35 +175,36 @@ class module(object):
     def logFileSelect(self):
         filename = self.iCeDeROM.modules['gui'].dialogs['file'].getSaveFileName(
             self.iCeDeROM.modules['gui'].window, 'Save File')
-        if filename == '': return
-        self.logFileName = str(filename)
+        if filename[0] == '': return
+        self.logFileName = str(filename[0])
         self.trees['logfilename'].setText(2, self.logFileName)
 
     def keyPressEvent(self, QKeyEvent):
-        '''Handle keystrokes.'''
-        if self.iCeDeROM.modules['interface'].device == None: return
+        """Handle keystrokes."""
+        if self.iCeDeROM.modules['interface'].device is None: return
         try:
             self.parent.write(QKeyEvent.text())
         except:
             self.iCeDeROM.modules['log'].log.exception('Write failed!')
 
     def insertFromMimeData(self, QMimeData):
-        '''Handle Paste-From-Clipboard and Drag-And-Drop.'''
-        if self.iCeDeROM.modules['interface'].device == None: return
+        """Handle Paste-From-Clipboard and Drag-And-Drop."""
+        if self.iCeDeROM.modules['interface'].device is None: return
         try:
             self.parent.write(QMimeData.text())
         except:
             self.iCeDeROM.modules['log'].log.exception('Paste failed!')
 
     def timerEvent(self, QTimerEvent):
-        if self.iCeDeROM.modules['interface'].device == None: return
-        self.write(self.parent.read(32))
+        if self.iCeDeROM.modules['interface'].device is None: return
+        self.write(self.parent.read(READ_BYTES_CHUNK_SIZE))
 
     def write(self, data):
-        if data == '': return
+        if data=='' or data==b'': return
+        if type(data) == type(b''): data=str(data.decode("UTF-8"))
         self.texts[self.name].insertPlainText(data)
         if self.buttons['autoscroll'].isChecked():
-            self.texts[self.name].moveCursor(QtWidgets.QTextCursor.End, QtWidgets.QTextCursor.MoveAnchor)
+            self.texts[self.name].moveCursor(Qt.QTextCursor.End, Qt.QTextCursor.MoveAnchor)
 
     def clearTerminal(self):
         self.texts[self.name].setPlainText('')

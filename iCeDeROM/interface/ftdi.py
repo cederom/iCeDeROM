@@ -17,13 +17,13 @@ interfaces = {
 
 class module(object):
     """
-	Provides UART comms with FTDI based interfaces.
-	"""
+    Provides UART comms with FTDI based interfaces.
+    """
 
     def __init__(self, **params):
         """Create FTDI UART Device.
-		Note: Use Setup routine to connect to a physical Device.
-		"""
+        Note: Use Setup routine to connect to a physical Device.
+        """
         self.name = 'ftdi.uart'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
@@ -36,24 +36,24 @@ class module(object):
         self.baudrates = [300, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200, 230400]
         # Try to run GUI if possible
         if self.iCeDeROM.ui == 'qt':
-            import ftdi_qt
+            import iCeDeROM.interface.ftdi_qt as ftdi_qt
             params['parent'] = self
             self.ui['qt'] = ftdi_qt.module(**params)
 
     def setup(self, **params):
         """Connect and/or Setup the pylibftdi device.
-		Parameters:
-			vid/pid   is the USB VID and/or PID number of your interface
-			serial    is the serial number of the device
-			mode      is the connect mode ('t'ext or 'b'inary, default 'b')
-			encoding  is the encoding to use for operation (default latin1)	
-			index     is the device index for equal VID/PID (default 0)
-			interface is the device in case of multi-interface devices
-			baudrate  is the transmission speed in bauds
-		Returns:
-			True      when successful
-		Note: Some parameters are mandatory to connect to a physical device!
-		"""
+        Parameters:
+            vid/pid   is the USB VID and/or PID number of your interface
+            serial    is the serial number of the device
+            mode      is the connect mode ('t'ext or 'b'inary, default 'b')
+            encoding  is the encoding to use for operation (default latin1)
+            index     is the device index for equal VID/PID (default 0)
+            interface is the device in case of multi-interface devices
+            baudrate  is the transmission speed in bauds
+        Returns:
+            True      when successful
+        Note: Some parameters are mandatory to connect to a physical device!
+        """
         cfg = dict()
         try:
             if 'vid' in params:

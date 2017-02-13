@@ -12,8 +12,8 @@ from PyQt5 import QtCore, QtWidgets
 
 class module(object):
     """
-	Provides Qt Widget for Memory iCeDeROM module.
-	"""
+    Provides Qt Widget for Memory iCeDeROM module.
+    """
 
     def __init__(self, **params):
         """Create Qt Widget for Memory module."""
@@ -151,7 +151,7 @@ class module(object):
             self, 'Memory', 'This is a Memory Menu Test...')
 
     def setupHexView(self):
-        '''Setup HexView header and table parameters.'''
+        """Setup HexView header and table parameters."""
         self.windowContentWidth = self.addrColumnWidth + self.asciiColumnWidth
         self.hexColumnMultiply = self.windows[self.name].width()
         self.hexColumnMultiply /= self.hexColumnWidth * self.hexColumnCount + self.addrColumnWidth
@@ -172,17 +172,17 @@ class module(object):
         self.tables[self.name].setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
     def resizeEvent(self, QResizeEvent):
-        '''Adjust HexView according to QtWidget/Window (re)size.'''
+        """Adjust HexView according to QtWidget/Window (re)size."""
         size = QResizeEvent.size()
         width = size.width()
         height = size.height()
         self.setupHexView()
 
     def update(self):
-        '''
-			Update the HexView data with the one provided in parent's buffer.
-			TODO: Chunk based preload depending on the scrollbar size.
-		'''
+        """
+        Update the HexView data with the one provided in parent's buffer.
+        TODO: Chunk based preload depending on the scrollbar size.
+        """
         # if self.parent.filename==None: return
         self.parent.buffer.seek(0, io.SEEK_SET)
         cols = self.hexColumnCount * self.hexColumnMultiply

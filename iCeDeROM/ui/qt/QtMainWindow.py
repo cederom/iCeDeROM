@@ -16,14 +16,14 @@ class module(object):
 
     def __init__(self, **params):
         """
-		Creates QT GUI MainWindow.
-		Parameters:
-			iCeDeROM object reference (mandatory).
-			argv     from sys.argv (mandatory).
-			
-		You can override QtStyle with '-style' commandline option.
-		"""
+        Creates QT GUI MainWindow.
+        Parameters:
+            iCeDeROM object reference (mandatory).
+            argv     from sys.argv (mandatory).
+        You can override QtStyle with '-style' commandline option.
+        """
         self.name = 'gui'
+        self.description = 'PyQt5'
         if not 'iCeDeROM' in params:
             raise KeyError('iCeDeROM parameter reference mandatory!')
         self.iCeDeROM = params['iCeDeROM']

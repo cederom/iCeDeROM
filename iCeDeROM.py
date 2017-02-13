@@ -38,7 +38,7 @@ class iCeDeROM(object):
 			#Create the GUI MainWindow
 			import iCeDeROM.ui.qt.QtMainWindow
 			module=iCeDeROM.ui.qt.QtMainWindow.module(iCeDeROM=self, argv=sys.argv)
-			self.modules['log'].log.info('Loading '+module.name+' module...')
+			self.modules['log'].log.info('Loading '+module.name+' ('+module.description+') module...')
 			module.setup(iCeDeROM=self)
 			self.modules[module.name]=module			
 			#Load example mdiWindow module
@@ -82,7 +82,5 @@ class iCeDeROM(object):
 		self.modules['log'].log.info('iCeDeROM %s shutdown...', self.release)
 		self.modules['log'].stop()
 
-
 if __name__ == '__main__':
 	iCD=iCeDeROM(ui='qt')
-
