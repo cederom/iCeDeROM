@@ -45,7 +45,7 @@ iCeDeROM was started by CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.i
 - [ ] Transport Layer between Target Device and Interface Layer.
 - [ ] Various Hardware Interfaces support.
 - [ ] Memory buffer, chunk-based.
-- [ ] Hex Editor.
+- [ ] Hex Editor + annotations.
 - [ ] JTAG Support.
 - [ ] SWD Support.
 - [ ] MIPS CPU Support.
