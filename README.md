@@ -30,10 +30,12 @@ iCeDeROM was started by CeDeROM Tomasz Bolesław CEDRO (http://www.tomek.cedro.i
   - [ ] Make Terminal use Interface encoding.
 - [X] Terminal
   - [x] Serial Console Port terminal
-  - [X] QtWidget CLI
-  - [ ] Terminal history search.
-  - [ ] RegExp search.
+  - [X] QtWidget.
+  - [ ] Terminal history search + highlight.
+  - [ ] RegExp search + highlight.
   - [ ] Terminal cursor/move/select/append fixes.
+  - [ ] Copy/Paste.
+  - [ ] Disconnect.
 
 
 ## Planned Features
